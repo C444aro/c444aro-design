@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>c444aro — Sistema de diseño</title>
+<meta name="description" content="Referencia visual del sistema de diseño c444aro: colores, tipografía, formas y componentes.">
+<style>
+:root{
+  --primary:#0081C5; --secondary:#E80029; --tertiary:#FFC600;
+  --neutral:#F9DFB7; --ink:#0B1F3A; --white:#FFFFFF;
+  --primary-soft:rgba(0,129,197,.6); --secondary-soft:rgba(232,0,41,.6); --tertiary-soft:rgba(255,198,0,.6);
+  --shadow-blue:rgba(0,129,197,.7); --shadow-red:rgba(232,0,41,.7); --shadow-yellow:rgba(255,198,0,.7);
+  --rounded-none:0px; --rounded-sm:8px; --rounded-md:12px; --rounded-lg:16px; --rounded-full:9999px;
+  --xs:4px; --sm:8px; --md:16px; --lg:24px; --xl:32px; --container:1200px; --shadow-offset:12px;
+  --font-display:"Mr Eaves Sans OT","Avenir",system-ui,sans-serif;
+  --font-body:"Avenir",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --tscale:1; --shaper:12;
+}
+@font-face{font-family:"Mr Eaves Sans OT";src:url("tipografias/woff/MrEavesXLModOT-Heavy.woff") format("woff");font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:"Mr Eaves Sans OT";src:url("tipografias/woff/MrEavesXLModOT-Bold.woff") format("woff");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Mr Eaves Sans OT";src:url("tipografias/woff/MrEavesXLModOT-Book.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Avenir";src:url("tipografias/woff/Avenir-Book.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Avenir";src:url("tipografias/woff/Avenir-Medium.woff") format("woff");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Avenir";src:url("tipografias/woff/Avenir-Black.woff") format("woff");font-weight:900;font-style:normal;font-display:swap}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--neutral);color:var(--ink);font-family:var(--font-body);font-size:18px;font-weight:400;line-height:1.6}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0 0 var(--md)}
+h1{font-size:clamp(40px,6vw,64px);font-weight:900;letter-spacing:-.02em;line-height:1.1}
+h2{font-size:clamp(30px,4vw,44px);font-weight:900;letter-spacing:-.01em}
+h3{font-size:28px;font-weight:700}
+p{max-width:none}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--neutral);padding:12px 20px;border-radius:0 0 12px 0;z-index:100}
+.skip:focus{left:0}
+.wrap{max-width:var(--container);margin:0 auto;padding:0 var(--lg)}
+section.block{padding:40px 0}
+@media(min-width:900px){section.block{padding:56px 0}}
+.band{border-radius:24px;padding:clamp(24px,4vw,48px);margin:16px 0}
+.kicker{font-family:var(--font-body);font-weight:900;font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 var(--sm)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;background:rgba(11,31,58,.07);padding:2px 8px;border-radius:8px}
+.spec{font-size:14px;opacity:.8;margin-top:8px}
+/* HEADER: solo cambia el color, sin sombras ni líneas */
+header.site{position:sticky;top:0;z-index:50;background:var(--neutral)}
+.nav{display:flex;align-items:center;gap:var(--md);max-width:var(--container);margin:0 auto;padding:var(--sm) var(--lg)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-family:var(--font-display);font-weight:900;font-size:22px}
+.brand img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+nav.links{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+nav.links a{font-family:var(--font-body);font-weight:900;font-size:14px;color:var(--primary);text-decoration:none;padding:8px 10px;transition:color .2s ease}
+nav.links a:hover{color:var(--secondary)}
+nav.links a.active{color:var(--secondary)}
+.menu-btn{display:none;margin-left:auto;background:var(--primary);color:var(--neutral);border:0;border-radius:var(--rounded-full);padding:10px 18px;font-weight:900;font-family:var(--font-body);cursor:pointer}
+@media(max-width:900px){nav.links{display:none;width:100%;flex-direction:column}nav.links.open{display:flex}.menu-btn{display:block}}
+/* MI MARCA: fondo beige clásico, sin azul */
+#marca{background:var(--neutral)}
+.hero-inner{position:relative;display:grid;gap:var(--lg);grid-template-columns:1fr;align-items:center}
+@media(min-width:900px){.hero-inner{grid-template-columns:1fr 1fr}}
+.hero-icon{display:grid;place-items:center}
+.hero-icon img{width:min(420px,95%);image-rendering:pixelated}
+.subtitle{font-family:var(--font-display);font-weight:700;font-size:28px;color:var(--primary);margin:0 0 var(--md)}
+.btn{display:inline-block;border:0;cursor:pointer;text-decoration:none;text-align:center;font-family:var(--font-body);font-weight:900;font-size:15px;padding:10px 20px;border-radius:var(--rounded-full);transition:transform .25s ease,box-shadow .25s ease}
+.btn-p{background:var(--primary);color:var(--neutral)}
+.btn-p:hover{transform:scale(1.05);box-shadow:0 0 0 6px rgba(0,129,197,.35)}
+.btn-t{background:var(--tertiary);color:var(--ink)}
+.btn-t:hover{transform:scale(1.05);box-shadow:0 0 0 6px rgba(255,198,0,.45)}
+.btn-row{display:flex;gap:var(--md);flex-wrap:wrap}
+.serp{height:26px;border-radius:var(--rounded-full);background:linear-gradient(90deg,var(--primary),var(--secondary),var(--tertiary));background-size:200% 100%;animation:slide 8s linear infinite alternate}
+@keyframes slide{from{background-position:0 0}to{background-position:100% 0}}
+@media(prefers-reduced-motion:reduce){.serp{animation:none}html{scroll-behavior:auto}*{transition:none!important}}
+/* COLORES: medalla con forma del ícono + círculos */
+#colores{background:var(--white)}
+.color-list{display:grid;gap:var(--md);grid-template-columns:1fr}
+@media(min-width:800px){.color-list{grid-template-columns:1fr 1fr}}
+.color-item{display:flex;gap:var(--md);align-items:center;background:var(--neutral);border-radius:var(--rounded-md);padding:var(--md);cursor:pointer;border:2px solid transparent;width:100%;text-align:left;font:inherit;color:inherit}
+.color-item:hover{border-color:currentColor}
+.medal{width:110px;height:110px;flex:none;background-color:var(--c,#0081C5);
+  -webkit-mask-image:url("assets/icon-c444aro.png");mask-image:url("assets/icon-c444aro.png");
+  -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
+  border-radius:50%}
+.dot{width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:900;font-size:13px}
+.contrast-grid{display:grid;gap:var(--md);grid-template-columns:1fr}
+@media(min-width:800px){.contrast-grid{grid-template-columns:1fr 1fr}}
+.contrast-item{display:flex;gap:var(--md);align-items:center;background:var(--neutral);border-radius:var(--rounded-md);padding:var(--md)}
+/* TIPOGRAFÍA: fondo azul, texto libre + escala interactiva */
+#tipografia{background:var(--primary);color:var(--white)}
+#tipografia .kicker{color:var(--tertiary)}
+#tipografia .mono{background:rgba(255,255,255,.18)}
+.type-demo{font-size:calc(1em * var(--tscale))}
+.type-demo .t-display{font-family:var(--font-display);font-weight:900;font-size:calc(64px * var(--tscale));line-height:1.1;letter-spacing:-.02em}
+.type-demo .t-lg{font-family:var(--font-display);font-weight:900;font-size:calc(44px * var(--tscale));line-height:1.15}
+.type-demo .t-md{font-family:var(--font-display);font-weight:700;font-size:calc(28px * var(--tscale));line-height:1.25}
+.type-demo .t-body{font-size:calc(18px * var(--tscale));font-weight:400;line-height:1.6}
+.type-demo .t-label{font-size:calc(14px * var(--tscale));font-weight:500;letter-spacing:.02em}
+.type-layout{display:grid;gap:var(--lg);grid-template-columns:1fr}
+@media(min-width:900px){.type-layout{grid-template-columns:1fr 260px}}
+.scalebox{background:rgba(255,255,255,.14);border-radius:var(--rounded-md);padding:var(--lg);color:var(--white);align-self:start;position:sticky;top:80px}
+input[type=range]{width:100%;accent-color:var(--tertiary);height:32px}
+/* LAYOUT rediseñado */
+#espaciado{background:var(--tertiary)}
+.journey{position:relative;display:grid;gap:12px;margin-top:var(--md)}
+.stop{display:flex;gap:12px;align-items:center;background:var(--neutral);border-radius:var(--rounded-full);padding:10px 18px;font-weight:900;width:fit-content}
+.stop:nth-child(odd){background:var(--white)}
+.stop i{width:28px;height:28px;border-radius:50%;background:var(--primary);color:var(--white);display:grid;place-items:center;font-style:normal;font-size:14px}
+.stop:nth-child(3n) i{background:var(--secondary)}
+.gap-demo{margin-top:var(--lg);background:var(--ink);color:var(--neutral);border-radius:var(--rounded-md);padding:var(--lg)}
+.gap-bar{height:24px;border-radius:var(--rounded-full);background:linear-gradient(90deg,var(--primary),var(--secondary),var(--tertiary))}
+.cols-demo{display:grid;gap:var(--md);grid-template-columns:1fr;margin-top:var(--md)}
+@media(min-width:800px){.cols-demo{grid-template-columns:1fr 1fr 1fr}}
+.cols-demo div{background:var(--white);color:var(--ink);border-radius:var(--rounded-md);padding:var(--md);font-weight:700;text-align:center}
+/* ELEVACIÓN rediseñada */
+#elevacion{background:var(--ink);color:var(--neutral)}
+#elevacion .kicker{color:var(--tertiary)}
+.stack{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:var(--md)}
+.stk{background:var(--neutral);color:var(--ink);border-radius:var(--rounded-md);padding:var(--lg);position:relative;transition:transform .25s ease}
+.stk small{display:block;font-size:14px;opacity:.75}
+.stk.b{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-blue)}
+.stk.r{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-red)}
+.stk.y{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-yellow)}
+.stk:hover{transform:translate(-4px,-4px)}
+/* FORMAS + barra */
+#formas{background:var(--white)}
+.morphs{display:grid;gap:var(--md);grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:var(--md) 0}
+.morph{background:var(--primary);color:var(--neutral);height:110px;display:grid;place-items:center;font-weight:900;border-radius:calc(var(--shaper) * 1px)}
+.morph:nth-child(2){background:var(--secondary)}
+.morph:nth-child(3){background:var(--tertiary);color:var(--ink)}
+.shapebar{background:var(--neutral);border-radius:var(--rounded-md);padding:var(--lg)}
+/* COMPONENTES centrado */
+#componentes{background:var(--white);text-align:center}
+#componentes .btn-row{justify-content:center}
+#componentes .tags,#componentes .social{justify-content:center}
+.cards{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--md)}
+.pcard{border-radius:var(--rounded-md);padding:48px var(--lg);font-weight:900;font-family:var(--font-display);font-size:24px;transition:box-shadow .25s ease,transform .25s ease;cursor:pointer;border:0}
+.pcard small{display:block;font-family:var(--font-body);font-weight:500;font-size:15px}
+.pcard.b{background:var(--primary-soft);color:var(--ink)}
+.pcard.b:hover{transform:scale(1.03);box-shadow:0 0 28px var(--shadow-blue)}
+.pcard.r{background:var(--secondary-soft);color:var(--ink)}
+.pcard.r:hover{transform:scale(1.03);box-shadow:0 0 28px var(--shadow-red)}
+.pcard.y{background:var(--tertiary-soft);color:var(--ink)}
+.pcard.y:hover{transform:scale(1.03);box-shadow:0 0 28px var(--shadow-yellow)}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tag{background:var(--primary-soft);border-radius:var(--rounded-sm);padding:8px 12px;font-size:14px;font-weight:500;color:var(--ink)}
+.tag.r{background:var(--secondary-soft)}.tag.y{background:var(--tertiary-soft)}
+.social{display:flex;gap:12px;flex-wrap:wrap}
+.soc{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;text-decoration:none;transition:transform .2s ease}
+.soc.b{background:var(--primary);color:var(--neutral)}
+.soc.b:hover,.soc.b.swap{background:var(--neutral);color:var(--primary);box-shadow:inset 0 0 0 2px var(--primary);transform:scale(1.08)}
+.soc.y{background:var(--tertiary);color:var(--ink)}
+.soc.y:hover,.soc.y.swap{background:var(--ink);color:var(--tertiary);transform:scale(1.08)}
+.link-demo{font-weight:900;font-size:18px;color:var(--primary);text-decoration:none}
+.link-demo.active{color:var(--secondary)}
+.avatar{display:inline-flex;gap:var(--md);align-items:center;background:var(--neutral);border-radius:var(--rounded-md);padding:var(--md);text-align:left}
+.avatar .cat{width:64px;height:64px;border-radius:50%;background:var(--ink);display:grid;place-items:center;font-size:34px;flex:none}
+/* REGLAS: fondo rojo */
+#reglas{background:var(--secondary);color:var(--white)}
+#reglas .kicker{color:var(--tertiary)}
+.dodont{display:grid;gap:var(--md);grid-template-columns:1fr}
+@media(min-width:900px){.dodont{grid-template-columns:1fr 1fr}}
+.do,.dont{border-radius:var(--rounded-md);padding:var(--lg)}
+.do{background:var(--white);color:var(--ink)}
+.dont{background:var(--ink);color:var(--neutral)}
+footer{padding:32px 0 48px;font-size:14px;opacity:.8}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--neutral);padding:10px 18px;border-radius:var(--rounded-full);font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site">
+  <div class="nav">
+    <a class="brand" href="#marca" aria-label="c444aro inicio"><img src="assets/icon-c444aro.png" alt="Ícono mándala pixelado de c444aro"> c444aro</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainNav">Menú</button>
+    <nav class="links" id="mainNav" aria-label="Secciones del sistema">
+      <a href="#marca">Mi marca</a>
+      <a href="#colores">Colores</a>
+      <a href="#tipografia">Tipografía</a>
+      <a href="#espaciado">Layout</a>
+      <a href="#elevacion">Elevación</a>
+      <a href="#formas">Formas</a>
+      <a href="#componentes">Componentes</a>
+      <a href="#reglas">Reglas</a>
+    </nav>
+  </div>
+</header>
+<main id="contenido" class="wrap">
+  <section class="block band" id="marca" aria-labelledby="t-marca">
+    <div class="hero-inner">
+      <div>
+        <p class="kicker">Mi marca · menos es más</p>
+        <h1 id="t-marca">Carolina Romero</h1>
+        <p class="subtitle">c444aro</p>
+        <p>Solo el concepto <strong>menos es más</strong>: lo sintetizado resalta y el ícono es el protagonista.</p>
+        <div class="btn-row">
+          <a class="btn btn-p" href="#componentes">Ver componentes</a>
+          <a class="btn btn-t" href="#colores">Ver paleta</a>
+        </div>
+      </div>
+      <div class="hero-icon">
+        <img src="assets/icon-c444aro.png" alt="Mándala simétrico pixelado: curvas rojas, ramas azules y centro amarillo">
+      </div>
+    </div>
+    <div class="serp" aria-hidden="true" style="margin-top:24px"></div>
+  </section>
+
+  <section class="block band" id="colores" aria-labelledby="t-colores">
+    <p class="kicker">01 · Colors</p>
+    <h2 id="t-colores">Paleta y rol</h2>
+    <p>PANTONES estables en web, impresión y digital sobre base beige. Selecciona cualquier color y su HEX se copia automáticamente.</p>
+    <div class="color-list">
+      <button class="color-item" data-hex="#0081C5" style="--c:#0081C5"><span class="medal" aria-hidden="true"></span><span><strong>Primary · #0081C5</strong><br>PANTONE Process Blue. Textos, gráficos e íconos.</span></button>
+      <button class="color-item" data-hex="#E80029" style="--c:#E80029"><span class="medal" aria-hidden="true"></span><span><strong>Secondary · #E80029</strong><br>PANTONE 185. Textos, gráficos e íconos.</span></button>
+      <button class="color-item" data-hex="#FFC600" style="--c:#FFC600"><span class="medal" aria-hidden="true"></span><span><strong>Tertiary · #FFC600</strong><br>PANTONE 7548. Ícono, botones y contenedores.</span></button>
+      <button class="color-item" data-hex="#F9DFB7" style="--c:#c9a86a"><span class="medal" aria-hidden="true"></span><span><strong>Neutral · #F9DFB7</strong><br>PANTONE 7506. Siempre el fondo, nunca texto.</span></button>
+      <button class="color-item" data-hex="#0B1F3A" style="--c:#0B1F3A"><span class="medal" aria-hidden="true"></span><span><strong>Ink · #0B1F3A</strong><br>Texto de cuerpo. Sin negro puro ni gris.</span></button>
+      <button class="color-item" data-hex="#FFFFFF" style="--c:#9db3c8"><span class="medal" aria-hidden="true"></span><span><strong>White · #FFFFFF</strong><br>Apoyo: texto sobre azul o rojo.</span></button>
+    </div>
+    <h3>Combinaciones de contraste</h3>
+    <div class="contrast-grid">
+      <div class="contrast-item"><span class="dot" style="background:#0081C5;color:#FFC600">Aa</span><span><strong>Azul + amarillo</strong><br>Fondo <span class="mono">#0081C5</span> con texto <span class="mono">#FFC600</span>.</span></div>
+      <div class="contrast-item"><span class="dot" style="background:#E80029;color:#FFFFFF">Aa</span><span><strong>Rojo + blanco</strong><br>Fondo <span class="mono">#E80029</span> con texto <span class="mono">#FFFFFF</span>.</span></div>
+      <div class="contrast-item"><span class="dot" style="background:#F9DFB7;color:#0081C5">Aa</span><span><strong>Beige + azul marino</strong><br>Fondo <span class="mono">#F9DFB7</span> con texto <span class="mono">#0B1F3A</span>.</span></div>
+      <div class="contrast-item"><span class="dot" style="background:#FFC600;color:#E80029">Aa</span><span><strong>Amarillo + rojo</strong><br>Fondo <span class="mono">#FFC600</span> con texto <span class="mono">#E80029</span>.</span></div>
+    </div>
+  </section>
+
+  <section class="block band" id="tipografia" aria-labelledby="t-tipo">
+    <p class="kicker">02 · Typography</p>
+    <h2 id="t-tipo">Dos familias, jerarquía por peso y tamaño</h2>
+    <p>Solo Mr Eaves Sans OT para títulos y Avenir para cuerpo y enlaces. La jerarquía nace del peso y el tamaño, nunca de más colores ni decoración. El interlineado es el default: basta con que el texto no se empalme.</p>
+    <div class="type-layout">
+      <div class="type-demo" id="typeDemo">
+        <div class="t-display">Menos es más · 64px Heavy</div>
+        <div class="t-lg">Título de sección · 44px Heavy</div>
+        <div class="t-md">Subtítulo · 28px peso menor</div>
+        <p class="t-body">Cuerpo Avenir Book 18px: juguetón, innovador y juvenil, combinado con lo formal. La ventaja de estas familias es su variedad de pesos visuales y el color que emplean para resaltar.</p>
+        <div class="t-label">ETIQUETAS Y PIES · AVENIR MEDIUM 14PX</div>
+      </div>
+      <div class="scalebox">
+        <label for="typeScale"><strong>Escala interactiva</strong><br>Mueve y el texto crece.</label>
+        <input type="range" id="typeScale" min="70" max="140" value="100" aria-describedby="typeVal">
+        <p id="typeVal" class="spec">100%</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="espaciado" aria-labelledby="t-esp">
+    <p class="kicker">03 · Layout</p>
+    <h2 id="t-esp">Una cinta continua, no secciones partidas</h2>
+    <p>Todo el portafolio es una gran sección vertical. Las serpentinas conectan una parada con la siguiente y el aire beige protege títulos, fotos y tarjetas.</p>
+    <div class="journey" aria-label="Recorrido del portafolio">
+      <div class="stop"><i>1</i> Inicio</div>
+      <div class="stop"><i>2</i> Sobre mí</div>
+      <div class="stop"><i>3</i> Experiencia</div>
+      <div class="stop"><i>4</i> Educación</div>
+      <div class="stop"><i>5</i> Proyectos / Portafolio</div>
+      <div class="stop"><i>6</i> Habilidades</div>
+      <div class="stop"><i>7</i> Contacto</div>
+    </div>
+    <div class="gap-demo">
+      <strong>Ancho máximo 1200px centrado · respiro generoso entre paradas</strong>
+      <div class="gap-bar" style="margin-top:12px" aria-hidden="true"></div>
+      <div class="cols-demo"><div>💻 Computadora · aireado</div><div>📱 Celular · 1 columna</div><div>📟 Tablet · adaptable</div></div>
+    </div>
+  </section>
+
+  <section class="block band" id="elevacion" aria-labelledby="t-elev">
+    <p class="kicker">04 · Elevation</p>
+    <h2 id="t-elev">Flat con stickers que flotan</h2>
+    <p>Cero blur. La profundidad es un recuadro sólido al 70% desplazado 12px abajo y a la derecha, como una estampa pegada. Pasa el cursor y se despega un poco más.</p>
+    <div class="stack">
+      <div class="stk b"><strong>Foto + sombra azul</strong><small>shadow-blue · mismo radio 12px · sin difuminado</small></div>
+      <div class="stk r"><strong>Tarjeta + sombra roja</strong><small>shadow-red · efecto sticker · marcos del ícono</small></div>
+      <div class="stk y"><strong>Contenedor + sombra amarilla</strong><small>shadow-yellow · planos por tono 60%, no por sombra</small></div>
+    </div>
+  </section>
+
+  <section class="block band" id="formas" aria-labelledby="t-formas">
+    <p class="kicker">05 · Shapes</p>
+    <h2 id="t-formas">Todo redondeado, nada cuadrado</h2>
+    <p>Tarjetas y fotos en 8–12px, botones y RRSS en pill y círculo, más lo orgánico: serpentinas y mándala.</p>
+    <div class="morphs" id="morphs">
+      <div class="morph">sm</div><div class="morph">md</div><div class="morph">pill</div>
+    </div>
+    <div class="shapebar">
+      <label for="shapeRange"><strong>Mueve la barrita</strong> y las formas se alteran en vivo.</label>
+      <input type="range" id="shapeRange" min="0" max="60" value="12">
+      <p class="spec" id="shapeVal">Radio actual: 12px</p>
+    </div>
+  </section>
+
+  <section class="block band" id="componentes" aria-labelledby="t-comp">
+    <p class="kicker">06 · Components</p>
+    <h2 id="t-comp">Componentes</h2>
+    <p>Texto y botones centrados. Todo pill, todo con contraste, todo con hover que brilla.</p>
+    <div class="btn-row">
+      <button class="btn btn-p" type="button">Primario</button>
+      <button class="btn btn-s" type="button" style="background:var(--secondary);color:var(--neutral)">Secundario</button>
+      <button class="btn btn-t" type="button">Terciario</button>
+    </div>
+    <p style="margin-top:24px"><a class="link-demo" href="#componentes">Azul en reposo</a> · <a class="link-demo active" href="#componentes" aria-current="page">Rojo al seleccionar</a></p>
+    <div class="cards">
+      <button class="pcard b" type="button">Proyecto textil<small>Recuadro del tono · hover con resplandor</small></button>
+      <button class="pcard r" type="button">Experiencia<small>Recuadro del tono · hover con resplandor</small></button>
+      <button class="pcard y" type="button">Habilidad<small>Recuadro del tono · hover con resplandor</small></button>
+    </div>
+    <div class="tags" style="margin-top:24px"><span class="tag">Identidad</span><span class="tag r">Textil</span><span class="tag y">Print</span></div>
+    <div class="social" style="margin-top:8px">
+      <a class="soc b" href="#componentes" aria-label="Red social">Be</a>
+      <a class="soc b" href="#componentes" aria-label="Red social">Ig</a>
+      <a class="soc y" href="#componentes" aria-label="Red social">X</a>
+    </div>
+    <div style="margin-top:24px"><div class="avatar"><span class="cat" role="img" aria-label="Ilustración de gato negro">🐈‍⬛</span><p><strong>Gato negro</strong> · Inicio y Sobre mí.</p></div></div>
+  </section>
+
+  <section class="block band" id="reglas" aria-labelledby="t-reglas">
+    <p class="kicker">07 · Do's and Don'ts</p>
+    <h2 id="t-reglas">Las reglas</h2>
+    <div class="dodont">
+      <div class="do"><h3>Do</h3><ul><li>Ícono sobre beige, como fondo puntual y recurrente.</li><li>Mucho beige alrededor de todo.</li><li>Amarillo con texto marino.</li><li>Jerarquía con peso y tamaño.</li><li>Cuerpo en marino.</li></ul></div>
+      <div class="dont"><h3>Don't</h3><ul><li>Beige para texto ni esquinas cuadradas.</li><li>Sombras con blur, negro puro o gris.</li><li>Más de 2 tipografías.</li><li>"c444aro" en el CV.</li><li>Ícono sobre blanco.</li></ul></div>
+    </div>
+  </section>
+
+  <footer><p>c444aro · Referencia desde <span class="mono">DESIGN.md</span> · Carolina Romero · menos es más.</p></footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'),nav=document.getElementById('mainNav');
+  btn.addEventListener('click',function(){var open=nav.classList.toggle('open');btn.setAttribute('aria-expanded',open?'true':'false');});
+})();
+(function(){
+  var links=[...document.querySelectorAll('nav.links a')];
+  var map={};links.forEach(a=>map[a.getAttribute('href').slice(1)]=a);
+  var io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.remove('active'));var a=map[e.target.id];if(a)a.classList.add('active');}});},{rootMargin:'-40% 0px -55% 0px'});
+  ['marca','colores','tipografia','espaciado','elevacion','formas','componentes','reglas'].forEach(id=>{var el=document.getElementById(id);if(el)io.observe(el);});
+})();
+(function(){
+  var toast=document.getElementById('toast'),t;
+  function show(m){toast.textContent=m;toast.classList.add('show');clearTimeout(t);t=setTimeout(()=>toast.classList.remove('show'),1600);}
+  document.querySelectorAll('.color-item').forEach(b=>b.addEventListener('click',async()=>{
+    var hex=b.dataset.hex;
+    try{await navigator.clipboard.writeText(hex);show(hex+' copiado');}catch(e){show(hex);}
+  }));
+  document.querySelectorAll('.soc').forEach(s=>s.addEventListener('click',e=>{e.preventDefault();s.classList.toggle('swap');}));
+  var ts=document.getElementById('typeScale'),tv=document.getElementById('typeVal');
+  ts.addEventListener('input',()=>{document.documentElement.style.setProperty('--tscale',ts.value/100);tv.textContent=ts.value+'%';});
+  var sr=document.getElementById('shapeRange'),sv=document.getElementById('shapeVal');
+  sr.addEventListener('input',()=>{document.documentElement.style.setProperty('--shaper',sr.value);sv.textContent='Radio actual: '+sr.value+'px';});
+})();
+</script>
+</body>
+</html>
