@@ -86,14 +86,27 @@
   }
 
   var momentoGuardado = 0;
+  /* Cuántas veces se ha intentado devolver la música a su punto, y hasta cuándo hacerlo. */
+  var intentosAjuste = 0;
+  var ajusteHasta = 0;
+
+  /* El avance real del audio también sirve para comprobar el punto: hay navegadores que
+     reanudan desde el principio aunque hayan conservado el segundo, y ahí se devuelve la
+     música al punto guardado (el mismo salto que se hace al cambiar de página, que es el
+     que siempre funciona). Si no se puede, se deja sonar y se sigue guardando el avance. */
   audio.addEventListener('timeupdate', function () {
-    if (audio.currentTime > 0) {
-      if (restaurando) {
-        if (audio.currentTime >= objetivo - 2) restaurando = false;
-        else return;
+    if (restaurando && objetivo > 0 && !audio.paused) {
+      if (audio.currentTime >= objetivo - 3) {
+        restaurando = false;                                  /* ya quedó en su punto */
+      } else if (intentosAjuste < 3 && Date.now() <= ajusteHasta) {
+        intentosAjuste++;
+        try { audio.currentTime = objetivo; } catch (e) {}
+      } else {
+        restaurando = false;                                  /* no se pudo: se deja sonar */
       }
-      ultimoTiempo = audio.currentTime;
+      if (restaurando) return;                                /* no se guarda un punto equivocado */
     }
+    if (audio.currentTime > 0) ultimoTiempo = audio.currentTime;
     var ahora = Date.now();
     if (ahora - momentoGuardado > 1000) { momentoGuardado = ahora; escribir(CLAVE_TIEMPO, ultimoTiempo); }
   });
@@ -139,24 +152,16 @@
      dentro del gesto del visitante.
      Solo se salta al segundo guardado si de verdad hace falta: si el audio ya está en
      ese punto (por ejemplo al volver a encender con el botón), saltar sin necesidad es
-     lo que reiniciaba la canción en algunos navegadores. */
-  var eventosAjuste = ['loadedmetadata', 'canplay', 'playing'];
+     lo que reiniciaba la canción en algunos navegadores. Si aun así el navegador arranca
+     desde otro punto, el vigilante del avance lo devuelve a su lugar. */
   function retomar() {
     var t = objetivo;
     audio.preload = 'auto';
     var salto = t > 0 && Math.abs(audio.currentTime - t) > 1.5;
-    restaurando = salto;
+    restaurando = t > 0;
+    if (t > 0) { intentosAjuste = 0; ajusteHasta = Date.now() + 5000; }
     if (salto) { try { audio.currentTime = t; } catch (e) {} }
     arrancar();
-    if (!salto) return;
-    var ajustar = function () {
-      if (audio.currentTime < t - 2) { try { audio.currentTime = t; } catch (e) {} }
-    };
-    eventosAjuste.forEach(function (ev) { audio.addEventListener(ev, ajustar); });
-    setTimeout(function () {
-      eventosAjuste.forEach(function (ev) { audio.removeEventListener(ev, ajustar); });
-      restaurando = false;
-    }, 4000);
   }
 
   /* Segundo exacto en que se apagó la música, para volver a encenderla justo ahí. */
