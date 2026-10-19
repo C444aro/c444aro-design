@@ -1,0 +1,37 @@
+# Carolina Romero — Portafolio y CV
+
+Repositorio del portafolio y CV digital de **Carolina Romero** (*Caro Romero*), diseñadora gráfica con profundización en Diseño y Estrategia de Marca.
+
+El proyecto reúne el sitio web del portafolio (portada y CV), construido en HTML, CSS y JavaScript, junto con el sistema de diseño de la marca **c444aro** y los documentos de arquitectura y diseño. La identidad se apoya en el lema *"Menos es más"*: colores primarios vibrantes sobre beige, patrones textiles mexicanos y un mandala pixelado, con tipografías Mr Eaves Sans OT y Avenir.
+
+## Páginas publicadas
+
+- **Portafolio / CV (index.html):** https://c444aro.github.io/c444aro-design/
+- **Sistema de diseño (design.html):** https://c444aro.github.io/c444aro-design/design.html
+
+## Documentos del repositorio
+
+- **Sistema de diseño:** [DESIGN.md](./DESIGN.md)
+- **Arquitectura e información del CV:** [CV.md](./CV.md)
+- **Documento del sistema de diseño (PDF):** [docs/DESIGN_actualizado.pdf](./docs/DESIGN_actualizado.pdf)
+- **Documento de arquitectura del CV (PDF):** [docs/Arquitectura-CV.pdf](./docs/Arquitectura-CV.pdf)
+
+## Contenido del proyecto
+
+| Carpeta / archivo | Descripción |
+| --- | --- |
+| `index.html` | Página principal del portafolio y CV. |
+| `cv.html` | Página del CV. |
+| `design.html` | Página del sistema de diseño. |
+| `proyectos/` | Páginas de proyectos (ANA, Core Frost, Jugos Invicto, Kleenex Amoxtli, Labdic, entre otros). |
+| `assets/` | Imágenes, animaciones, íconos, música y recursos gráficos. |
+| `tipografias/` | Tipografías usadas en el sitio (Avenir, Mr Eaves Sans OT, Borel). |
+| `docs/` | Documentos de diseño y arquitectura (Word y PDF). |
+| `DESIGN.md` | Sistema de diseño: colores, tipografía, componentes y reglas de marca. |
+| `CV.md` | Estructura y contenido del CV en lenguaje natural. |
+| `cursor.js` | Interacción del cursor en el sitio. |
+| `README.md` | Este documento. |
+
+---
+
+Diseño y contenido: **Carolina Romero** · GitHub: [@C444aro](https://github.com/C444aro)
