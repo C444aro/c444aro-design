@@ -74,6 +74,7 @@
   /* Mientras se salta al segundo guardado, los primeros instantes del audio no cuentan:
      si se guardaran, la música volvería al principio en la página siguiente. */
   var restaurando = false;
+  var ajusteHasta = 0;        /* hasta cuándo se insiste en volver al punto guardado */
 
   /* Guarda el segundo exacto; si el audio ya se reinició al cerrar la página,
      conserva el último punto conocido para no perder el avance. */
@@ -86,27 +87,14 @@
   }
 
   var momentoGuardado = 0;
-  /* Cuántas veces se ha intentado devolver la música a su punto, y hasta cuándo hacerlo. */
-  var intentosAjuste = 0;
-  var ajusteHasta = 0;
-
-  /* El avance real del audio también sirve para comprobar el punto: hay navegadores que
-     reanudan desde el principio aunque hayan conservado el segundo, y ahí se devuelve la
-     música al punto guardado (el mismo salto que se hace al cambiar de página, que es el
-     que siempre funciona). Si no se puede, se deja sonar y se sigue guardando el avance. */
   audio.addEventListener('timeupdate', function () {
-    if (restaurando && objetivo > 0 && !audio.paused) {
-      if (audio.currentTime >= objetivo - 3) {
-        restaurando = false;                                  /* ya quedó en su punto */
-      } else if (intentosAjuste < 3 && Date.now() <= ajusteHasta) {
-        intentosAjuste++;
-        try { audio.currentTime = objetivo; } catch (e) {}
-      } else {
-        restaurando = false;                                  /* no se pudo: se deja sonar */
+    if (audio.currentTime > 0) {
+      if (restaurando) {
+        if (audio.currentTime >= objetivo - 3) restaurando = false;
+        else return;                    /* todavía no llegó: no se guarda un punto equivocado */
       }
-      if (restaurando) return;                                /* no se guarda un punto equivocado */
+      ultimoTiempo = audio.currentTime;
     }
-    if (audio.currentTime > 0) ultimoTiempo = audio.currentTime;
     var ahora = Date.now();
     if (ahora - momentoGuardado > 1000) { momentoGuardado = ahora; escribir(CLAVE_TIEMPO, ultimoTiempo); }
   });
@@ -147,19 +135,41 @@
     });
   }
 
+  /* Devuelve la música al punto guardado. No se da por vencido en el primer intento: al
+     pausar, hay navegadores que sueltan el audio y lo vuelven a cargar al reanudar, así
+     que el salto se aplica en cuanto el audio está listo, y se sigue intentando unos
+     segundos (con un tope, para no insistir sin fin). Es el mismo salto que se hace al
+     abrir la página, que es el que sí funciona. */
+  var intentosPunto = 0;
+  var ultimoIntento = 0;
+  function alPunto() {
+    if (!restaurando || objetivo <= 0) return;
+    if (audio.currentTime >= objetivo - 3) { restaurando = false; return; }
+    if (Date.now() > ajusteHasta || intentosPunto >= 8) { restaurando = false; return; }  /* no se pudo: se deja sonar */
+    if (audio.paused || audio.readyState < 1) return;                                     /* todavía no está listo */
+    var ahora = Date.now();
+    if (ahora - ultimoIntento < 500) return;                                              /* se deja pasar un momento */
+    ultimoIntento = ahora;
+    intentosPunto++;
+    try { audio.currentTime = objetivo; } catch (e) {}
+  }
+  ['loadedmetadata', 'canplay', 'playing', 'seeked', 'timeupdate'].forEach(function (ev) {
+    audio.addEventListener(ev, alPunto);
+  });
+
   /* Vuelve a sonar desde el punto guardado.
      El play() es síncrono: Safari y Firefox solo dan sonido si la reproducción empieza
      dentro del gesto del visitante.
      Solo se salta al segundo guardado si de verdad hace falta: si el audio ya está en
-     ese punto (por ejemplo al volver a encender con el botón), saltar sin necesidad es
-     lo que reiniciaba la canción en algunos navegadores. Si aun así el navegador arranca
-     desde otro punto, el vigilante del avance lo devuelve a su lugar. */
+     ese punto (por ejemplo al volver a encender con el botón), saltar sin necesidad
+     reinicia la canción en algunos navegadores. Si aun así el navegador arranca desde
+     otro punto, se devuelve al punto guardado en cuanto el audio está listo. */
   function retomar() {
     var t = objetivo;
     audio.preload = 'auto';
     var salto = t > 0 && Math.abs(audio.currentTime - t) > 1.5;
     restaurando = t > 0;
-    if (t > 0) { intentosAjuste = 0; ajusteHasta = Date.now() + 5000; }
+    if (t > 0) { ajusteHasta = Date.now() + 10000; intentosPunto = 0; }
     if (salto) { try { audio.currentTime = t; } catch (e) {} }
     arrancar();
   }
