@@ -1,7 +1,7 @@
 /* Música del portafolio c444aro — se comparte entre el CV y las páginas de proyecto.
-   La música solo se detiene cuando se pulsa el botón: al cambiar de página se guarda
-   la preferencia (on/off) y el segundo exacto donde iba, y en la página siguiente se
-   retoma desde ese mismo punto. */
+   La música solo se detiene cuando se pulsa el botón: al cambiar de página se guarda la
+   preferencia (on/off) y el segundo exacto, y en la siguiente página arranca de inmediato
+   en ese punto, sin esperar a que termine de cargar el audio. */
 (function () {
   var base = new URL('.', document.currentScript.src).href;
   var nav = document.querySelector('header.site .nav');
@@ -9,15 +9,22 @@
 
   var CLAVE_ON = 'c444aro-musica';
   var CLAVE_TIEMPO = 'c444aro-musica-tiempo';
+  var FUENTE = base + 'musica-cv.m4a?v=2';
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (e) { return null; } }
   function escribir(clave, valor) { try { localStorage.setItem(clave, String(valor)); } catch (e) {} }
 
+  /* La preferencia se lee antes de crear el audio: si está encendida, la descarga
+     empieza de inmediato y la música no tarda en sonar al cambiar de página. */
+  var encendida = leer(CLAVE_ON) === '1';
+  var ultimoTiempo = parseFloat(leer(CLAVE_TIEMPO)) || 0;
+  var objetivo = ultimoTiempo;
+
   var audio = document.createElement('audio');
   audio.id = 'bgMusic';
-  audio.src = base + 'musica-cv.m4a';
+  audio.src = FUENTE;
   audio.loop = true;
-  audio.preload = 'none';
+  audio.preload = encendida ? 'auto' : 'none';
   audio.setAttribute('playsinline', '');
   document.body.appendChild(audio);
 
@@ -26,12 +33,6 @@
   btn.type = 'button';
   btn.id = 'musicBtn';
   nav.appendChild(btn);
-
-  /* Intención del usuario: la música solo se apaga con el botón. */
-  var encendida = leer(CLAVE_ON) === '1';
-  var ultimoTiempo = parseFloat(leer(CLAVE_TIEMPO)) || 0;
-  var objetivo = ultimoTiempo;
-  var momentoGuardado = 0;
 
   function pintar() {
     btn.textContent = encendida ? 'Música: on' : 'Música: off';
@@ -48,6 +49,7 @@
     escribir(CLAVE_TIEMPO, t);
   }
 
+  var momentoGuardado = 0;
   audio.addEventListener('timeupdate', function () {
     if (audio.currentTime > 0) ultimoTiempo = audio.currentTime;
     var ahora = Date.now();
@@ -61,51 +63,52 @@
     if (document.visibilityState === 'hidden') guardarTiempo();
   });
 
-  /* Si el navegador bloquea el autoplay, se reanuda con el primer gesto del visitante. */
+  /* Algunos navegadores (Safari, sobre todo) bloquean el sonido hasta que el visitante
+     interactúa. En ese caso la música sigue corriendo en silencio para no perder el
+     hilo, y suena en cuanto hay un gesto. */
   var eventosGesto = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
-  function esperarGesto() {
+  function escucharGesto() {
     eventosGesto.forEach(function (ev) { document.addEventListener(ev, conGesto, { capture: true }); });
   }
-  function sinGestos() {
+  function olvidarGesto() {
     eventosGesto.forEach(function (ev) { document.removeEventListener(ev, conGesto, { capture: true }); });
   }
   function conGesto() {
-    sinGestos();
-    if (encendida && audio.paused) retomar();
-  }
-
-  /* Coloca el audio en el segundo guardado, reintentando por si el servidor
-     tarda en permitir el salto; luego arranca la reproducción. */
-  function fijarTiempo(t, luego) {
-    if (!t) { luego(); return; }
-    var intentos = 0;
-    (function intentarPoner() {
-      try { audio.currentTime = t; } catch (e) {}
-      intentos++;
-      if (Math.abs(audio.currentTime - t) > 1.5 && intentos < 6) setTimeout(intentarPoner, 120);
-      else luego();
-    })();
+    olvidarGesto();
+    if (!encendida) return;
+    audio.muted = false;
+    if (audio.paused) retomar();
   }
 
   function arrancar() {
     var p = audio.play();
-    if (p && p.catch) {
-      p.catch(function () { if (encendida) esperarGesto(); });
-    }
+    if (!p || !p.catch) return;
+    p.catch(function () {
+      if (!encendida) return;
+      audio.muted = true;                       /* deja correr el tiempo sin sonido */
+      var p2 = audio.play();
+      if (p2 && p2.catch) p2.catch(function () {});
+      escucharGesto();
+    });
   }
 
+  /* Coloca el audio en el segundo guardado y arranca en cuanto hay datos para saltar
+     (el primer fragmento llega en milisegundos), sin bucles de reintento. */
   function retomar() {
     var t = objetivo, hecho = false;
-    function seguir() {
+    audio.preload = 'auto';
+    function empezar() {
       if (hecho) return;
       hecho = true;
-      fijarTiempo(t, arrancar);
+      if (t > 0) { try { audio.currentTime = t; } catch (e) {} }
+      arrancar();
     }
-    audio.preload = 'auto';
-    if (audio.readyState >= 1) { seguir(); return; }
-    audio.addEventListener('loadedmetadata', seguir, { once: true });
-    try { audio.load(); } catch (e) {}          /* arranca la carga aunque el preload fuera 'none' */
-    setTimeout(seguir, 2500);                    /* respaldo por si el evento no llega */
+    if (t <= 0 || audio.readyState >= 1) { empezar(); return; }
+    audio.addEventListener('loadedmetadata', empezar, { once: true });
+    setTimeout(empezar, 600);                              /* red de seguridad */
+    audio.addEventListener('canplay', function () {        /* por si el salto no se aplicó */
+      if (t > 0 && audio.currentTime < t - 2) { try { audio.currentTime = t; } catch (e) {} }
+    }, { once: true });
   }
 
   btn.addEventListener('click', function () {
@@ -116,6 +119,7 @@
       audio.pause();
     } else {
       encendida = true;
+      audio.muted = false;
       escribir(CLAVE_ON, '1');
       objetivo = ultimoTiempo;
       retomar();
@@ -124,9 +128,5 @@
   });
 
   pintar();
-  if (encendida) {
-    audio.preload = 'auto';
-    objetivo = ultimoTiempo;
-    retomar();
-  }
+  if (encendida) { objetivo = ultimoTiempo; retomar(); }
 })();

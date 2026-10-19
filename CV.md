@@ -16,7 +16,7 @@ Lleva un header con los apartados:
 - Proyectos
 - Contacto
 
-Hay un botón que activa y desactiva la música de la interfaz. La música solo se detiene con ese botón: sigue sonando y continúa en el mismo segundo aunque se cambie de sección o de página. En tableta y móvil, el header se queda en el mismo formato, pero se debe adaptar en tamaño a la pantalla.
+Hay un botón que activa y desactiva la música de la interfaz. La música solo se detiene con ese botón: al cambiar de sección o de página continúa en el mismo segundo y suena de inmediato, sin cortes ni esperas (la descarga se adelanta desde que abre la página y el audio arranca sin esperar a que cargue completo). Si el navegador bloquea el sonido hasta que el visitante interactúa, la música sigue corriendo en silencio y se escucha con el primer toque, sin reiniciarse. En tableta y móvil, el header se queda en el mismo formato, pero se debe adaptar en tamaño a la pantalla.
 
 En el header también lleva mi nombre de c444aro junto con mi logo, que es mi icono; al pulsarlo se vuelve a la portada. Todo el portafolio debe ser responsivo y aplicar mi sistema de diseño.
 

@@ -4,6 +4,8 @@ Repositorio del portafolio y CV digital de **Carolina Romero** (*Caro Romero*), 
 
 El proyecto reúne el sitio web del portafolio (portada y CV), construido en HTML, CSS y JavaScript, junto con el sistema de diseño de la marca **c444aro** y los documentos de arquitectura y diseño. La identidad se apoya en el lema *"Menos es más"*: colores primarios vibrantes sobre beige, patrones textiles mexicanos y un mandala pixelado, con tipografías Mr Eaves Sans OT y Avenir.
 
+El sitio lleva música de fondo que solo se detiene con el botón del header: al cambiar de sección o de página continúa en el mismo segundo, sin cortes ni reinicios.
+
 ## Páginas publicadas
 
 - **Portafolio y CV (index.html):** https://c444aro.github.io/c444aro-design/
@@ -25,6 +27,8 @@ El proyecto reúne el sitio web del portafolio (portada y CV), construido en HTM
 | `design.html` | Página del sistema de diseño. |
 | `proyectos/` | Páginas de proyectos (ANA, Core Frost, Jugos Invicto, Kleenex Amoxtli, Labdic, entre otros). |
 | `assets/` | Imágenes, animaciones, íconos, música y recursos gráficos. |
+| `assets/musica/musica.js` | Botón y reproducción de la música de fondo (continua entre páginas; solo se detiene con el botón). |
+| `assets/musica/musica-cv.m4a` | Pista de fondo del sitio (AAC 96 kbps, listo para reproducirse desde el primer fragmento). |
 | `tipografias/` | Tipografías usadas en el sitio (Avenir, Mr Eaves Sans OT, Borel). |
 | `docs/` | Documentos de diseño y arquitectura (Word y PDF). |
 | `DESIGN.md` | Sistema de diseño: colores, tipografía, componentes y reglas de marca. |
