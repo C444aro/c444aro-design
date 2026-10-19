@@ -6,8 +6,7 @@ El proyecto reúne el sitio web del portafolio (portada y CV), construido en HTM
 
 ## Páginas publicadas
 
-- **Portada del portafolio (index.html):** https://c444aro.github.io/c444aro-design/
-- **CV (cv.html):** https://c444aro.github.io/c444aro-design/cv.html
+- **Portafolio y CV (index.html):** https://c444aro.github.io/c444aro-design/
 - **Sistema de diseño (design.html):** https://c444aro.github.io/c444aro-design/design.html
 
 ## Documentos del repositorio
@@ -21,8 +20,8 @@ El proyecto reúne el sitio web del portafolio (portada y CV), construido en HTM
 
 | Carpeta / archivo | Descripción |
 | --- | --- |
-| `index.html` | Portada de pantalla completa con la palabra "Portafolio"; al hacer clic abre el CV. |
-| `cv.html` | Página del CV. |
+| `index.html` | Página del portafolio: portada de bienvenida con fondo azul y, al pulsar "Entrar", el CV completo. |
+| `cv.html` | Redirige a `index.html` (mantiene los enlaces anteriores). |
 | `design.html` | Página del sistema de diseño. |
 | `proyectos/` | Páginas de proyectos (ANA, Core Frost, Jugos Invicto, Kleenex Amoxtli, Labdic, entre otros). |
 | `assets/` | Imágenes, animaciones, íconos, música y recursos gráficos. |
