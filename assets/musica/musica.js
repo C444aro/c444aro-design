@@ -24,7 +24,7 @@
       var on = api.activa();
       botonVisor.textContent = on ? 'Música: on' : 'Música: off';
       botonVisor.setAttribute('aria-pressed', on ? 'true' : 'false');
-      botonVisor.title = on ? 'Pausar la música' : 'Activar la música';
+      botonVisor.title = on ? 'Apagar la música' : 'Encender la música';
     };
     botonVisor.addEventListener('click', function () {
       api.alternar();
@@ -40,6 +40,7 @@
 
   var CLAVE_ON = 'c444aro-musica';
   var CLAVE_TIEMPO = 'c444aro-musica-tiempo';
+  var CLAVE_PARADA = 'c444aro-musica-parada';
   var FUENTE = base + 'musica-cv.m4a?v=3';
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (e) { return null; } }
@@ -49,13 +50,19 @@
      empieza de inmediato y la música no tarda en sonar al cambiar de página. */
   var encendida = leer(CLAVE_ON) === '1';
   var ultimoTiempo = parseFloat(leer(CLAVE_TIEMPO)) || 0;
-  var objetivo = ultimoTiempo;
+  /* Segundo en que se apagó la música con el botón: al volver a encenderla se retoma ahí. */
+  var paradaEn = parseFloat(leer(CLAVE_PARADA)) || 0;
+  /* Si ya usó la música antes y la dejó apagada, se deja lista en silencio: así al
+     encenderla no hay que cargarla de nuevo ni saltar a ningún punto, y nunca se reinicia. */
+  var listaEnSilencio = !encendida && paradaEn > 0;
+  var objetivo = encendida ? ultimoTiempo : paradaEn;
 
   var audio = document.createElement('audio');
   audio.id = 'bgMusic';
   audio.src = FUENTE;
   audio.loop = true;
-  audio.preload = encendida ? 'auto' : 'none';
+  audio.preload = (encendida || listaEnSilencio) ? 'auto' : 'none';
+  audio.muted = listaEnSilencio;
   audio.setAttribute('playsinline', '');
   document.body.appendChild(audio);
 
@@ -68,7 +75,7 @@
   function pintar() {
     btn.textContent = encendida ? 'Música: on' : 'Música: off';
     btn.setAttribute('aria-pressed', encendida ? 'true' : 'false');
-    btn.title = encendida ? 'Pausar la música' : 'Activar la música';
+    btn.title = encendida ? 'Apagar la música' : 'Encender la música';
   }
 
   /* Mientras se salta al segundo guardado, los primeros instantes del audio no cuentan:
@@ -174,23 +181,28 @@
     arrancar();
   }
 
-  /* Segundo exacto en que se apagó la música, para volver a encenderla justo ahí. */
-  var pausadaEn = 0;
+  /* Apagar la música NO detiene la pista: solo le quita el sonido. Si se detuviera, el
+     navegador soltaría el audio y al encenderla otra vez lo cargaría desde el principio,
+     que era lo que reiniciaba la canción. Apagada sigue corriendo en silencio. */
+  function apagar() {
+    guardarTiempo();                   /* deja ultimoTiempo en el punto correcto */
+    paradaEn = ultimoTiempo;
+    escribir(CLAVE_PARADA, paradaEn);
+    audio.muted = true;
+  }
 
-  btn.addEventListener('click', function () {
-    if (encendida) {
-      encendida = false;
-      escribir(CLAVE_ON, '0');
-      guardarTiempo();                 /* deja ultimoTiempo en el punto correcto */
-      pausadaEn = ultimoTiempo;
-      audio.pause();
-    } else {
-      encendida = true;
-      audio.muted = false;
-      escribir(CLAVE_ON, '1');
-      objetivo = pausadaEn > 0 ? pausadaEn : ultimoTiempo;
+  function encender() {
+    audio.muted = false;               /* la canción sigue donde iba: solo vuelve el sonido */
+    if (audio.paused) {                /* por si el navegador la había detenido */
+      objetivo = paradaEn > 0 ? paradaEn : ultimoTiempo;
       retomar();
     }
+  }
+
+  btn.addEventListener('click', function () {
+    encendida = !encendida;
+    escribir(CLAVE_ON, encendida ? '1' : '0');
+    if (encendida) encender(); else apagar();
     pintar();
   });
 
@@ -206,5 +218,5 @@
   };
 
   pintar();
-  if (encendida) { objetivo = ultimoTiempo; retomar(); }
+  if (encendida || listaEnSilencio) retomar();
 })();

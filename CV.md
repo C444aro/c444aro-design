@@ -18,7 +18,7 @@ Lleva un header con los apartados:
 - Proyectos
 - Contacto
 
-Hay un botón que activa y desactiva la música de la interfaz. La música vive en el CV y solo se detiene con ese botón: las carpetas de proyecto se abren dentro del CV (visor a pantalla completa), así que al entrar y salir de un proyecto sigue en el mismo segundo, sin cortes, sin reinicios y sin esperas. Si la apago con el botón y la vuelvo a encender, continúa en el mismo segundo. El botón del header del proyecto controla esa misma música. Si el navegador bloquea el sonido hasta que el visitante interactúa, la música arranca con el primer gesto sin reiniciarse. En tableta y móvil (pantallas táctiles) los proyectos se abren como página normal y el header se adapta en tamaño a la pantalla.
+Hay un botón que activa y desactiva la música de la interfaz. La música vive en el CV y solo se apaga con ese botón: las carpetas de proyecto se abren dentro del CV (visor a pantalla completa), así que al entrar y salir de un proyecto sigue en el mismo segundo, sin cortes, sin reinicios y sin esperas. Si la apago con el botón, la canción no se detiene: solo se le quita el sonido, así que al volver a encenderla continúa donde va, sin reiniciarse desde el principio. El botón del header del proyecto controla esa misma música. Si el navegador bloquea el sonido hasta que el visitante interactúa, la música arranca con el primer gesto sin reiniciarse. En tableta y móvil (pantallas táctiles) los proyectos se abren como página normal y el header se adapta en tamaño a la pantalla.
 
 En el header también lleva mi nombre de c444aro junto con mi logo, que es mi icono; al pulsarlo se vuelve a la portada. Todo el portafolio debe ser responsivo y aplicar mi sistema de diseño.
 
