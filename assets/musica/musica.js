@@ -138,11 +138,10 @@
     });
   }
 
-  /* Devuelve la música al punto guardado. No se da por vencido en el primer intento: al
-     pausar, hay navegadores que sueltan el audio y lo vuelven a cargar al reanudar, así
-     que el salto se aplica en cuanto el audio está listo, y se sigue intentando unos
-     segundos (con un tope, para no insistir sin fin). Es el mismo salto que se hace al
-     abrir la página, que es el que sí funciona. */
+  /* Deja la música sonando en el punto guardado cuando la canción se retoma en otra
+     página (o cuando el navegador la tenía detenida). El audio puede tardar en estar
+     listo para saltar, así que no se da por vencido al primer intento: lo vuelve a
+     intentar unos segundos, con un tope para no insistir sin fin. */
   var intentosPunto = 0;
   var ultimoIntento = 0;
   function alPunto() {
@@ -160,13 +159,13 @@
     audio.addEventListener(ev, alPunto);
   });
 
-  /* Vuelve a sonar desde el punto guardado.
+  /* Arranca la música (y la deja en el segundo guardado si lo hay: al abrir la página
+     con la música encendida sigue donde iba).
      El play() es síncrono: Safari y Firefox solo dan sonido si la reproducción empieza
-     dentro del gesto del visitante.
-     Solo se salta al segundo guardado si de verdad hace falta: si el audio ya está en
-     ese punto (por ejemplo al volver a encender con el botón), saltar sin necesidad
-     reinicia la canción en algunos navegadores. Si aun así el navegador arranca desde
-     otro punto, se devuelve al punto guardado en cuanto el audio está listo. */
+     dentro del gesto del visitante. Solo se salta al segundo guardado si de verdad hace
+     falta: si el audio ya está en ese punto, saltar sin necesidad reinicia la canción en
+     algunos navegadores. Si aun así el navegador arranca desde otro punto, se devuelve al
+     punto guardado en cuanto el audio está listo. */
   function retomar() {
     var t = objetivo;
     audio.preload = 'auto';
