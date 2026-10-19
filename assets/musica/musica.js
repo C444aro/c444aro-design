@@ -1,6 +1,7 @@
 /* Música del portafolio c444aro — vive en el CV y no se corta al abrir un proyecto.
    Los proyectos se abren dentro del mismo CV (visor), así que la música nunca cambia de
-   página: sigue sonando en el segundo en que iba y solo se detiene con el botón.
+   página: sigue sonando en el segundo en que iba hasta que se apaga con el botón.
+   Al apagarla, la canción se detiene; al volver a encenderla empieza desde el inicio.
    Si un proyecto se abre directo (enlace compartido), arranca en el segundo guardado. */
 (function () {
   var base = new URL('.', document.currentScript.src).href;
@@ -40,7 +41,6 @@
 
   var CLAVE_ON = 'c444aro-musica';
   var CLAVE_TIEMPO = 'c444aro-musica-tiempo';
-  var CLAVE_PARADA = 'c444aro-musica-parada';
   var FUENTE = base + 'musica-cv.m4a?v=3';
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (e) { return null; } }
@@ -50,19 +50,13 @@
      empieza de inmediato y la música no tarda en sonar al cambiar de página. */
   var encendida = leer(CLAVE_ON) === '1';
   var ultimoTiempo = parseFloat(leer(CLAVE_TIEMPO)) || 0;
-  /* Segundo en que se apagó la música con el botón: al volver a encenderla se retoma ahí. */
-  var paradaEn = parseFloat(leer(CLAVE_PARADA)) || 0;
-  /* Si ya usó la música antes y la dejó apagada, se deja lista en silencio: así al
-     encenderla no hay que cargarla de nuevo ni saltar a ningún punto, y nunca se reinicia. */
-  var listaEnSilencio = !encendida && paradaEn > 0;
-  var objetivo = encendida ? ultimoTiempo : paradaEn;
+  var objetivo = ultimoTiempo;
 
   var audio = document.createElement('audio');
   audio.id = 'bgMusic';
   audio.src = FUENTE;
   audio.loop = true;
-  audio.preload = (encendida || listaEnSilencio) ? 'auto' : 'none';
-  audio.muted = listaEnSilencio;
+  audio.preload = encendida ? 'auto' : 'none';
   audio.setAttribute('playsinline', '');
   document.body.appendChild(audio);
 
@@ -84,8 +78,10 @@
   var ajusteHasta = 0;        /* hasta cuándo se insiste en volver al punto guardado */
 
   /* Guarda el segundo exacto; si el audio ya se reinició al cerrar la página,
-     conserva el último punto conocido para no perder el avance. */
+     conserva el último punto conocido para no perder el avance. Con la música
+     apagada el punto queda en cero: al encenderla, empieza desde el inicio. */
   function guardarTiempo() {
+    if (!encendida) { ultimoTiempo = 0; escribir(CLAVE_TIEMPO, 0); return; }
     var t = audio.currentTime;
     if (restaurando && objetivo > 0 && t < objetivo - 2) t = objetivo;
     if (!t && ultimoTiempo > 1) t = ultimoTiempo;
@@ -181,22 +177,22 @@
     arrancar();
   }
 
-  /* Apagar la música NO detiene la pista: solo le quita el sonido. Si se detuviera, el
-     navegador soltaría el audio y al encenderla otra vez lo cargaría desde el principio,
-     que era lo que reiniciaba la canción. Apagada sigue corriendo en silencio. */
+  /* Apagar la música detiene la canción: si se dejara corriendo en silencio, al
+     encenderla seguiría por donde iba, y aquí se quiere que empiece de nuevo. */
   function apagar() {
-    guardarTiempo();                   /* deja ultimoTiempo en el punto correcto */
-    paradaEn = ultimoTiempo;
-    escribir(CLAVE_PARADA, paradaEn);
-    audio.muted = true;
+    audio.muted = false;
+    audio.pause();
+    ultimoTiempo = 0;                  /* al volver a encenderla, desde el inicio */
+    escribir(CLAVE_TIEMPO, 0);
   }
 
   function encender() {
-    audio.muted = false;               /* la canción sigue donde iba: solo vuelve el sonido */
-    if (audio.paused) {                /* por si el navegador la había detenido */
-      objetivo = paradaEn > 0 ? paradaEn : ultimoTiempo;
-      retomar();
-    }
+    audio.muted = false;
+    objetivo = 0;
+    restaurando = false;
+    audio.preload = 'auto';
+    try { audio.currentTime = 0; } catch (e) {}   /* la canción empieza desde el inicio */
+    if (audio.paused) arrancar();
   }
 
   btn.addEventListener('click', function () {
@@ -218,5 +214,5 @@
   };
 
   pintar();
-  if (encendida || listaEnSilencio) retomar();
+  if (encendida) retomar();
 })();
