@@ -9,7 +9,7 @@
 
   var CLAVE_ON = 'c444aro-musica';
   var CLAVE_TIEMPO = 'c444aro-musica-tiempo';
-  var FUENTE = base + 'musica-cv.m4a?v=2';
+  var FUENTE = base + 'musica-cv.m4a?v=3';
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (e) { return null; } }
   function escribir(clave, valor) { try { localStorage.setItem(clave, String(valor)); } catch (e) {} }
@@ -92,23 +92,24 @@
     });
   }
 
-  /* Coloca el audio en el segundo guardado y arranca en cuanto hay datos para saltar
-     (el primer fragmento llega en milisegundos), sin bucles de reintento. */
+  /* Arranca de inmediato con un play() síncrono (Safari y Firefox solo dan sonido si
+     la reproducción empieza dentro del gesto del visitante: si se retrasa al evento de
+     carga, lo silencian) y salta al segundo guardado en cuanto hay datos. */
+  var eventosAjuste = ['loadedmetadata', 'canplay', 'playing'];
   function retomar() {
-    var t = objetivo, hecho = false;
+    var t = objetivo;
     audio.preload = 'auto';
-    function empezar() {
-      if (hecho) return;
-      hecho = true;
-      if (t > 0) { try { audio.currentTime = t; } catch (e) {} }
-      arrancar();
+    if (t > 0) { try { audio.currentTime = t; } catch (e) {} }
+    arrancar();
+    if (t > 0) {
+      var ajustar = function () {
+        if (audio.currentTime < t - 2) { try { audio.currentTime = t; } catch (e) {} }
+      };
+      eventosAjuste.forEach(function (ev) { audio.addEventListener(ev, ajustar); });
+      setTimeout(function () {
+        eventosAjuste.forEach(function (ev) { audio.removeEventListener(ev, ajustar); });
+      }, 4000);
     }
-    if (t <= 0 || audio.readyState >= 1) { empezar(); return; }
-    audio.addEventListener('loadedmetadata', empezar, { once: true });
-    setTimeout(empezar, 600);                              /* red de seguridad */
-    audio.addEventListener('canplay', function () {        /* por si el salto no se aplicó */
-      if (t > 0 && audio.currentTime < t - 2) { try { audio.currentTime = t; } catch (e) {} }
-    }, { once: true });
   }
 
   btn.addEventListener('click', function () {
