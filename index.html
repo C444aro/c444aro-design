@@ -428,7 +428,7 @@ body.portada-abierta{overflow:hidden}
   })();
 </script>
 <script src="cursor.js"></script>
-<script src="assets/musica/musica.js?v=2"></script>
+<script src="assets/musica/musica.js?v=3"></script>
 <script>
 /* Portada: es lo primero que se ve. Con el botón "Entrar" se abre el CV en Inicio.
    Si el enlace trae una sección concreta (#proyectos, etc.) se entra directo. */
@@ -436,6 +436,16 @@ body.portada-abierta{overflow:hidden}
   var portada=document.getElementById('portada');
   var entrar=document.getElementById('entrar');
   if(!portada) return;
+  function mostrarPortada(){
+    document.body.classList.add('portada-abierta');
+    portada.classList.remove('saliendo');
+    portada.style.display='';
+    window.scrollTo(0,0);
+    /* Reinicia la animación de entrada de la portada */
+    var img=portada.querySelector('.portada-img');
+    if(img){img.style.animation='none';void img.offsetWidth;img.style.animation='';}
+    if(location.hash){history.replaceState(null,'',location.pathname+location.search);}
+  }
   if(location.hash && location.hash.length>1){
     portada.style.display='none';
   }else{
@@ -453,6 +463,10 @@ body.portada-abierta{overflow:hidden}
     if(history.replaceState){history.replaceState(null,'',location.pathname+location.search);}
   }
   if(entrar) entrar.addEventListener('click',abrir);
+  /* "Inicio" y el nombre c444aro del header regresan a la portada. */
+  document.querySelectorAll('header.site a[href="#inicio"]').forEach(function(a){
+    a.addEventListener('click',function(ev){ev.preventDefault();mostrarPortada();});
+  });
 })();
 /* El CV siempre abre desde arriba, salvo que el enlace pida una sección concreta. */
 if('scrollRestoration' in history){history.scrollRestoration='manual';}

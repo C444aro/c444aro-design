@@ -5,19 +5,20 @@
 
 ## Estructura general y navegación
 
-Mi CV es una landing de dos páginas. La primera página es la portada (hero), donde aparece el texto “Portafolio”, y al darle clic en cualquier parte de la pantalla la pantalla se acerca y abre directamente en el inicio del CV.
+Mi CV es una landing de dos páginas. La primera página es la portada (hero), donde aparece el texto “Portafolio” sobre fondo azul y un botón “Entrar”; al pulsarlo la pantalla se acerca y abre directamente en el inicio del CV. Desde el CV se vuelve a la portada pulsando “Inicio” o mi nombre c444aro en el header.
 
 Lleva un header con los apartados:
 
+- Inicio (vuelve a la portada)
 - Sobre mí
 - Educación
 - Habilidades
 - Proyectos
 - Contacto
 
-Hay un botón que activa y desactiva la música de la interfaz. En tableta y móvil, el header se queda en el mismo formato, pero se debe adaptar en tamaño a la pantalla.
+Hay un botón que activa y desactiva la música de la interfaz. La música solo se detiene con ese botón: sigue sonando y continúa en el mismo segundo aunque se cambie de sección o de página. En tableta y móvil, el header se queda en el mismo formato, pero se debe adaptar en tamaño a la pantalla.
 
-En el header también lleva mi nombre de c444aro junto con mi logo, que es mi icono. Todo el portafolio debe ser responsivo y aplicar mi sistema de diseño.
+En el header también lleva mi nombre de c444aro junto con mi logo, que es mi icono; al pulsarlo se vuelve a la portada. Todo el portafolio debe ser responsivo y aplicar mi sistema de diseño.
 
 > Nota de implementación (derivada del sistema): en el CV siempre se usa “Carolina Romero” / “Caro Romero”, nunca “c444aro” como nombre (ver `DESIGN.md` — Don'ts).
 

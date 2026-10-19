@@ -139,6 +139,16 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.full}"
     size: 40px
+  music-button:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.full}"
+    padding: 10px
+  music-button-active:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.white}"
+    rounded: "{rounded.full}"
+    padding: 10px
 ---
 
 # c444aro
@@ -215,6 +225,8 @@ Todo redondeado, nunca esquinas rectas. Lenguaje orgánico + rectangular.
 - **Navegación y enlaces ({components.nav-link}, {components.nav-link-active}):** Avenir Black. Hover: crece ligeramente + brillo en borde de letras. Activo: cambia a otro primario (azul reposo → rojo seleccionado). Menú sticky con subrayado primario en sección actual. <!-- REVISAR: % de crecimiento y grosor de subrayado no especificados -->
 - **Íconos RRSS ({components.social-icon}, {components.social-icon-alt}):** círculo primario con ícono contrastante. Hover/selección: crecen y se invierten (azul↔beige, rojo↔beige, amarillo↔marino).
 - **Etiquetas ({components.tag}):** para habilidades, herramientas y categorías. Rectángulo pequeño redondeo ligero, primario al 60%, texto Avenir Medium contrastante. Cada categoría con color distinto.
+- **Botón de música ({components.music-button}, {components.music-button-active}):** pill en el header, en acento Borel. Apagado: amarillo ({colors.tertiary}) con texto marino; encendido: rojo ({colors.secondary}) con texto blanco. Es el único control de la música: el audio sigue sonando y continúa en el mismo segundo al cambiar de sección o de página.
+- **Portada:** pantalla de bienvenida a página completa con fondo azul ({colors.primary}) y la imagen del título del portafolio al centro; el botón "Entrar" abre el CV en Inicio. Se regresa a ella desde "Inicio" o el nombre c444aro del header.
 - **Avatar:** ilustración de gato negro, en Inicio y Sobre mí.
 - **Serpentinas y cursor:** serpentinas siempre en movimiento lento, no protagonistas; cursor = ícono de marca con rastro azul tenue. <!-- REVISAR: sin valores de animación definidos -->
 
