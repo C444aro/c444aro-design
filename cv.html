@@ -194,7 +194,7 @@ html.saliendo body{opacity:0;transform:translateY(-8px);transition:opacity .24s 
     <a class="brand" href="index.html" aria-label="c444aro, ir a la portada"><img class="icon" src="assets/img/icon-c444aro.png" alt="Ícono mándala pixelado de la marca c444aro" width="40" height="40" fetchpriority="high">c444aro</a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainNav">Menú</button>
     <nav class="links" id="mainNav" aria-label="Secciones del CV">
-      <a href="index.html">Inicio</a>
+      <a href="#inicio">Inicio</a>
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#educacion">Educación</a>
       <a href="#habilidades">Habilidades</a>
@@ -408,5 +408,11 @@ html.saliendo body{opacity:0;transform:translateY(-8px);transition:opacity .24s 
 </script>
 <script src="cursor.js"></script>
 <script src="assets/musica/musica.js?v=2"></script>
+<script>
+/* El CV siempre abre desde arriba (en la portada de la sección Inicio),
+   salvo que el enlace pida una sección concreta (por ejemplo #proyectos). */
+if('scrollRestoration' in history){history.scrollRestoration='manual';}
+window.addEventListener('load',function(){if(!location.hash){window.scrollTo(0,0);}});
+</script>
 </body>
 </html>
