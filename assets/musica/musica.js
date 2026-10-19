@@ -31,8 +31,9 @@
       api.desbloquear();      /* por si el navegador dejó el sonido en silencio */
       sincronizar();
     });
-    /* Si la música del CV quedó en silencio, el primer toque dentro del proyecto la suena. */
-    document.addEventListener('pointerdown', function () { api.desbloquear(); }, true);
+    /* Si la música del CV quedó en silencio, el primer toque dentro del proyecto la suena;
+       de paso el botón se pone al día con el estado real del CV. */
+    document.addEventListener('pointerdown', function () { api.desbloquear(); sincronizar(); }, true);
     sincronizar();
     return;
   }
@@ -133,39 +134,46 @@
     });
   }
 
-  /* Arranca de inmediato con un play() síncrono (Safari y Firefox solo dan sonido si
-     la reproducción empieza dentro del gesto del visitante: si se retrasa al evento de
-     carga, lo silencian) y salta al segundo guardado en cuanto hay datos. */
+  /* Vuelve a sonar desde el punto guardado.
+     El play() es síncrono: Safari y Firefox solo dan sonido si la reproducción empieza
+     dentro del gesto del visitante.
+     Solo se salta al segundo guardado si de verdad hace falta: si el audio ya está en
+     ese punto (por ejemplo al volver a encender con el botón), saltar sin necesidad es
+     lo que reiniciaba la canción en algunos navegadores. */
   var eventosAjuste = ['loadedmetadata', 'canplay', 'playing'];
   function retomar() {
     var t = objetivo;
     audio.preload = 'auto';
-    if (t > 0) { try { audio.currentTime = t; } catch (e) {} }
-    restaurando = t > 0;
+    var salto = t > 0 && Math.abs(audio.currentTime - t) > 1.5;
+    restaurando = salto;
+    if (salto) { try { audio.currentTime = t; } catch (e) {} }
     arrancar();
-    if (t > 0) {
-      var ajustar = function () {
-        if (audio.currentTime < t - 2) { try { audio.currentTime = t; } catch (e) {} }
-      };
-      eventosAjuste.forEach(function (ev) { audio.addEventListener(ev, ajustar); });
-      setTimeout(function () {
-        eventosAjuste.forEach(function (ev) { audio.removeEventListener(ev, ajustar); });
-        restaurando = false;
-      }, 4000);
-    }
+    if (!salto) return;
+    var ajustar = function () {
+      if (audio.currentTime < t - 2) { try { audio.currentTime = t; } catch (e) {} }
+    };
+    eventosAjuste.forEach(function (ev) { audio.addEventListener(ev, ajustar); });
+    setTimeout(function () {
+      eventosAjuste.forEach(function (ev) { audio.removeEventListener(ev, ajustar); });
+      restaurando = false;
+    }, 4000);
   }
+
+  /* Segundo exacto en que se apagó la música, para volver a encenderla justo ahí. */
+  var pausadaEn = 0;
 
   btn.addEventListener('click', function () {
     if (encendida) {
       encendida = false;
       escribir(CLAVE_ON, '0');
-      guardarTiempo();
+      guardarTiempo();                 /* deja ultimoTiempo en el punto correcto */
+      pausadaEn = ultimoTiempo;
       audio.pause();
     } else {
       encendida = true;
       audio.muted = false;
       escribir(CLAVE_ON, '1');
-      objetivo = ultimoTiempo;
+      objetivo = pausadaEn > 0 ? pausadaEn : ultimoTiempo;
       retomar();
     }
     pintar();

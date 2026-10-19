@@ -7,7 +7,7 @@
 <meta name="description" content="CV one-page de Carolina Romero: diseñadora gráfica especializada en marca y empaque. Sobre mí, educación, habilidades, proyectos y contacto.">
 <link rel="icon" href="assets/img/icon-c444aro.png" type="image/png">
 <!-- Adelanta la descarga de la música cuando el visitante la dejó encendida. -->
-<script>try{if(localStorage.getItem('c444aro-musica')==='1'){var l=document.createElement('link');l.rel='preload';l.as='audio';l.type='audio/mp4';l.href='assets/musica/musica-cv.m4a?v=3';document.head.appendChild(l);}}catch(e){}</script>
+<script>try{if(localStorage.getItem('c444aro-musica')==='1'){var l=document.createElement('link');l.rel='preload';l.as='fetch';l.type='audio/mp4';l.href='assets/musica/musica-cv.m4a?v=3';document.head.appendChild(l);}}catch(e){}</script>
 <style>
 /* Sistema c444aro (tokens de DESIGN.md) aplicado al CV de Arquitectura-CV.docx */
 :root{
@@ -174,10 +174,10 @@ nav.links a.active{color:var(--secondary);text-decoration:none}
 footer{padding:32px 0 48px;background:var(--canvas)}
 footer .wrap p{font-family:var(--font-accent);font-size:16px;margin:0;-webkit-text-stroke:0.4px currentColor;}
 .has-cursor,.has-cursor *{cursor:none!important}
-#cursor{position:fixed;left:-16px;top:-16px;width:32px;height:32px;z-index:9999;pointer-events:none}
+#cursor{position:fixed;left:-16px;top:-16px;width:32px;height:32px;z-index:9999;pointer-events:none;will-change:transform}
 #cursor.hidden{display:none}
 #cursor img{width:100%;height:100%;image-rendering:pixelated;display:block}
-.trail{position:fixed;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--primary);opacity:0;pointer-events:none;z-index:9998}
+.trail{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--primary);opacity:0;pointer-events:none;z-index:9998;will-change:transform,opacity}
 .trail.live{animation:trailfade .8s ease-out}
 @keyframes trailfade{from{opacity:.35;transform:scale(1)}to{opacity:0;transform:scale(.2)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}.roam,#cursor,.trail{display:none}}
@@ -201,7 +201,9 @@ body.portada-abierta{overflow:hidden}
    siga sonando, sin cortes ni reinicios, al pasar de una página a otra. */
 .visor-proyecto{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:150;background:var(--canvas)}
 body.visor-abierto{overflow:hidden}
-body.visor-abierto #cursor,body.visor-abierto .trail{display:none}
+/* El cursor y el rastro cuelgan de <html>, no de <body>: por eso el selector usa "~".
+   Sin esto, al abrir un proyecto quedaban dos cursores (el del CV congelado encima). */
+body.visor-abierto ~ #cursor,body.visor-abierto ~ .trail{display:none}
 @keyframes portadaIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){
   .portada-img{animation:none}
@@ -544,8 +546,8 @@ body.visor-abierto #cursor,body.visor-abierto .trail{display:none}
     });
   })();
 </script>
-<script src="cursor.js"></script>
-<script src="assets/musica/musica.js?v=6"></script>
+<script src="cursor.js?v=2"></script>
+<script src="assets/musica/musica.js?v=7"></script>
 <script>
 /* Portada: es lo primero que se ve. Con el botón "Entrar" se abre el CV en Inicio.
    Si el enlace trae una sección concreta (#proyectos, etc.) se entra directo. */

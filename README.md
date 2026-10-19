@@ -33,7 +33,7 @@ El sitio lleva música de fondo que solo se detiene con el botón del header. La
 | `docs/` | Documentos de diseño y arquitectura (Word y PDF). |
 | `DESIGN.md` | Sistema de diseño: colores, tipografía, componentes y reglas de marca. |
 | `CV.md` | Estructura y contenido del CV en lenguaje natural. |
-| `cursor.js` | Interacción del cursor en el sitio. |
+| `cursor.js` | Cursor del sitio (ícono de la marca con rastro): sigue al puntero con fluidez, se esconde al salir de la ventana y no se duplica al abrir un proyecto. |
 | `README.md` | Este documento. |
 
 ---
