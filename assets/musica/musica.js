@@ -1,11 +1,41 @@
-/* Música del portafolio c444aro — se comparte entre el CV y las páginas de proyecto.
-   La música solo se detiene cuando se pulsa el botón: al cambiar de página se guarda la
-   preferencia (on/off) y el segundo exacto, y en la siguiente página arranca de inmediato
-   en ese punto, sin esperar a que termine de cargar el audio. */
+/* Música del portafolio c444aro — vive en el CV y no se corta al abrir un proyecto.
+   Los proyectos se abren dentro del mismo CV (visor), así que la música nunca cambia de
+   página: sigue sonando en el segundo en que iba y solo se detiene con el botón.
+   Si un proyecto se abre directo (enlace compartido), arranca en el segundo guardado. */
 (function () {
   var base = new URL('.', document.currentScript.src).href;
   var nav = document.querySelector('header.site .nav');
   if (!nav) return;
+
+  /* Dentro del visor de proyectos (iframe del CV) la música la lleva el documento padre:
+     aquí solo se coloca el botón y se le pasa la orden. */
+  var enVisor = false;
+  try { enVisor = window.self !== window.top; } catch (e) { enVisor = true; }
+  if (enVisor) {
+    var api = null;
+    try { api = window.parent.c444aroMusica || null; } catch (e) {}
+    if (!api) return;
+    var botonVisor = document.createElement('button');
+    botonVisor.className = 'music-btn';
+    botonVisor.type = 'button';
+    botonVisor.id = 'musicBtn';
+    nav.appendChild(botonVisor);
+    var sincronizar = function () {
+      var on = api.activa();
+      botonVisor.textContent = on ? 'Música: on' : 'Música: off';
+      botonVisor.setAttribute('aria-pressed', on ? 'true' : 'false');
+      botonVisor.title = on ? 'Pausar la música' : 'Activar la música';
+    };
+    botonVisor.addEventListener('click', function () {
+      api.alternar();
+      api.desbloquear();      /* por si el navegador dejó el sonido en silencio */
+      sincronizar();
+    });
+    /* Si la música del CV quedó en silencio, el primer toque dentro del proyecto la suena. */
+    document.addEventListener('pointerdown', function () { api.desbloquear(); }, true);
+    sincronizar();
+    return;
+  }
 
   var CLAVE_ON = 'c444aro-musica';
   var CLAVE_TIEMPO = 'c444aro-musica-tiempo';
@@ -40,10 +70,15 @@
     btn.title = encendida ? 'Pausar la música' : 'Activar la música';
   }
 
+  /* Mientras se salta al segundo guardado, los primeros instantes del audio no cuentan:
+     si se guardaran, la música volvería al principio en la página siguiente. */
+  var restaurando = false;
+
   /* Guarda el segundo exacto; si el audio ya se reinició al cerrar la página,
      conserva el último punto conocido para no perder el avance. */
   function guardarTiempo() {
     var t = audio.currentTime;
+    if (restaurando && objetivo > 0 && t < objetivo - 2) t = objetivo;
     if (!t && ultimoTiempo > 1) t = ultimoTiempo;
     ultimoTiempo = t;
     escribir(CLAVE_TIEMPO, t);
@@ -51,7 +86,13 @@
 
   var momentoGuardado = 0;
   audio.addEventListener('timeupdate', function () {
-    if (audio.currentTime > 0) ultimoTiempo = audio.currentTime;
+    if (audio.currentTime > 0) {
+      if (restaurando) {
+        if (audio.currentTime >= objetivo - 2) restaurando = false;
+        else return;
+      }
+      ultimoTiempo = audio.currentTime;
+    }
     var ahora = Date.now();
     if (ahora - momentoGuardado > 1000) { momentoGuardado = ahora; escribir(CLAVE_TIEMPO, ultimoTiempo); }
   });
@@ -100,6 +141,7 @@
     var t = objetivo;
     audio.preload = 'auto';
     if (t > 0) { try { audio.currentTime = t; } catch (e) {} }
+    restaurando = t > 0;
     arrancar();
     if (t > 0) {
       var ajustar = function () {
@@ -108,6 +150,7 @@
       eventosAjuste.forEach(function (ev) { audio.addEventListener(ev, ajustar); });
       setTimeout(function () {
         eventosAjuste.forEach(function (ev) { audio.removeEventListener(ev, ajustar); });
+        restaurando = false;
       }, 4000);
     }
   }
@@ -127,6 +170,17 @@
     }
     pintar();
   });
+
+  /* Las páginas de proyecto abiertas dentro del visor controlan esta misma música. */
+  window.c444aroMusica = {
+    activa: function () { return encendida; },
+    alternar: function () { btn.click(); },
+    desbloquear: function () {
+      if (!encendida) return;
+      audio.muted = false;
+      if (audio.paused) retomar();
+    }
+  };
 
   pintar();
   if (encendida) { objetivo = ultimoTiempo; retomar(); }

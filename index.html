@@ -197,6 +197,11 @@ body{animation:pageInPortada .45s cubic-bezier(.22,.61,.36,1) both}
 .portada .btn{font-size:clamp(18px,2.4vw,24px);padding:18px 46px}
 .portada.saliendo{transform:scale(1.35);opacity:0;transition:transform .45s cubic-bezier(.22,.61,.36,1),opacity .45s ease}
 body.portada-abierta{overflow:hidden}
+/* Visor de proyectos: la página del proyecto se abre dentro del CV para que la música
+   siga sonando, sin cortes ni reinicios, al pasar de una página a otra. */
+.visor-proyecto{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:150;background:var(--canvas)}
+body.visor-abierto{overflow:hidden}
+body.visor-abierto #cursor,body.visor-abierto .trail{display:none}
 @keyframes portadaIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){
   .portada-img{animation:none}
@@ -211,6 +216,8 @@ body.portada-abierta{overflow:hidden}
   <img class="portada-img" src="assets/img/titulo-portafolio.png" alt="Portafolio" width="3496" height="1848" fetchpriority="high" decoding="async">
   <button class="btn btn-s" id="entrar" type="button">Entrar</button>
 </div>
+<!-- Visor de proyectos: las carpetas se abren aquí dentro, sin cambiar de página -->
+<iframe class="visor-proyecto" id="visorProyecto" title="Página del proyecto" hidden></iframe>
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="site">
   <div class="nav">
@@ -410,6 +417,114 @@ body.portada-abierta{overflow:hidden}
   });
 })();
 
+  /* Visor de proyectos: abre la carpeta dentro del CV para que la música siga sonando
+     sin cortes. En pantallas táctiles se navega normal, como hasta ahora. */
+  (function(){
+    var visor = document.getElementById('visorProyecto');
+    if(!visor) return;
+    if(!window.matchMedia || !window.matchMedia('(pointer:fine)').matches) return;
+    var URL_CV = location.href;
+    var abierto = false;
+
+    function esProyecto(url){
+      try { return /\/proyectos\/[^\/?#]+\.html$/i.test(new URL(url, location.href).pathname); }
+      catch(e){ return false; }
+    }
+
+    function mostrar(url){
+      visor.hidden = false;
+      document.body.classList.add('visor-abierto');
+      if(visor.src !== url) visor.src = url;
+      abierto = true;
+    }
+
+    function abrir(href){
+      var url = null;
+      try { url = new URL(href, URL_CV).href; } catch(e){ return; }
+      mostrar(url);
+      try { history.pushState({visor:url}, '', url); } catch(e){}
+    }
+
+    function cerrar(){
+      if(!abierto) return;
+      visor.hidden = true;
+      visor.src = 'about:blank';
+      document.body.classList.remove('visor-abierto');
+      abierto = false;
+    }
+
+    /* Regresa al CV. Si la entrada actual la creó el visor, se usa el historial:
+       así el botón "atrás" del navegador sigue teniendo sentido. */
+    function volver(){
+      if(history.state && history.state.visor){
+        history.back();
+        setTimeout(function(){
+          if(abierto){
+            cerrar();
+            try { history.replaceState(null, '', URL_CV.split('#')[0] + '#proyectos'); } catch(e){}
+            var s = document.getElementById('proyectos');
+            if(s) s.scrollIntoView();
+          }
+        }, 500);
+        return;
+      }
+      cerrar();
+      try { history.replaceState(null, '', URL_CV.split('#')[0] + '#proyectos'); } catch(e){}
+      var sec = document.getElementById('proyectos');
+      if(sec) sec.scrollIntoView();
+    }
+
+    /* Las tarjetas del CV abren el proyecto dentro del visor (con modificadores, pestaña nueva). */
+    document.addEventListener('click', function(ev){
+      if(ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+      var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
+      if(!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      var href = a.getAttribute('href') || '';
+      if(!/^proyectos\/[^\/?#]+\.html/i.test(href)) return;
+      ev.preventDefault();
+      abrir(href);
+    });
+
+    visor.addEventListener('load', function(){
+      var d = null, w = null;
+      try { d = visor.contentDocument; w = visor.contentWindow; } catch(e){}
+      if(!d || !w || visor.hidden) return;
+
+      /* La dirección del CV sigue al proyecto que se esté viendo. */
+      var actual = '';
+      try { actual = w.location.href; } catch(e){}
+      if(esProyecto(actual)){
+        try { history.replaceState({visor:actual}, '', actual); } catch(e){}
+      }
+
+      d.addEventListener('click', function(ev){
+        if(ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+        var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
+        if(!a) return;
+        /* "Volver a proyectos" regresa al CV, con la música intacta. */
+        if(a.classList.contains('volver')){
+          ev.preventDefault();
+          volver();
+          return;
+        }
+        if(a.target === '_blank' || a.hasAttribute('download')) return;
+        var href = a.getAttribute('href') || '';
+        if(!/^[^:\/?#]+\.html(#|\?|$)/i.test(href)) return;
+        /* Cambiar de carpeta dentro del visor: sin añadir páginas al historial. */
+        ev.preventDefault();
+        try { w.location.replace(new URL(href, w.location.href).href); }
+        catch(e) { w.location.href = href; }
+      }, true);
+    });
+
+    /* Atrás/adelante del navegador: cierra o reabre el visor según la dirección. */
+    window.addEventListener('popstate', function(){
+      var enProyecto = esProyecto(location.href);
+      if(enProyecto && !abierto) mostrar(location.href);
+      else if(!enProyecto && abierto) cerrar();
+    });
+  })();
+
   /* Transición suave al navegar entre páginas */
   (function(){
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -430,7 +545,7 @@ body.portada-abierta{overflow:hidden}
   })();
 </script>
 <script src="cursor.js"></script>
-<script src="assets/musica/musica.js?v=5"></script>
+<script src="assets/musica/musica.js?v=6"></script>
 <script>
 /* Portada: es lo primero que se ve. Con el botón "Entrar" se abre el CV en Inicio.
    Si el enlace trae una sección concreta (#proyectos, etc.) se entra directo. */

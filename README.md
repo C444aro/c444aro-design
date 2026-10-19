@@ -4,7 +4,7 @@ Repositorio del portafolio y CV digital de **Carolina Romero** (*Caro Romero*), 
 
 El proyecto reúne el sitio web del portafolio (portada y CV), construido en HTML, CSS y JavaScript, junto con el sistema de diseño de la marca **c444aro** y los documentos de arquitectura y diseño. La identidad se apoya en el lema *"Menos es más"*: colores primarios vibrantes sobre beige, patrones textiles mexicanos y un mandala pixelado, con tipografías Mr Eaves Sans OT y Avenir.
 
-El sitio lleva música de fondo que solo se detiene con el botón del header: al cambiar de sección o de página continúa en el mismo segundo, sin cortes ni reinicios.
+El sitio lleva música de fondo que solo se detiene con el botón del header. La música vive en el CV y las carpetas de proyecto se abren dentro de él (visor a pantalla completa), así que al entrar y salir de un proyecto continúa en el mismo segundo, sin cortes ni reinicios.
 
 ## Páginas publicadas
 
@@ -25,9 +25,9 @@ El sitio lleva música de fondo que solo se detiene con el botón del header: al
 | `index.html` | Página del portafolio: portada de bienvenida con fondo azul y, al pulsar "Entrar", el CV completo. |
 | `cv.html` | Redirige a `index.html` (mantiene los enlaces anteriores). |
 | `design.html` | Página del sistema de diseño. |
-| `proyectos/` | Páginas de proyectos (ANA, Core Frost, Jugos Invicto, Kleenex Amoxtli, Labdic, entre otros). |
+| `proyectos/` | Páginas de proyectos (ANA, Core Frost, Jugos Invicto, Kleenex Amoxtli, Labdic, entre otros). Se abren dentro del CV en un visor, para no cortar la música. |
 | `assets/` | Imágenes, animaciones, íconos, música y recursos gráficos. |
-| `assets/musica/musica.js` | Botón y reproducción de la música de fondo (continua entre páginas; solo se detiene con el botón). |
+| `assets/musica/musica.js` | Botón y reproducción de la música de fondo (vive en el CV, continúa al abrir proyectos y solo se detiene con el botón). |
 | `assets/musica/musica-cv.m4a` | Pista de fondo del sitio (AAC 96 kbps, listo para reproducirse desde el primer fragmento). |
 | `tipografias/` | Tipografías usadas en el sitio (Avenir, Mr Eaves Sans OT, Borel). |
 | `docs/` | Documentos de diseño y arquitectura (Word y PDF). |

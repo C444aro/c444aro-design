@@ -7,6 +7,8 @@
 
 Mi CV es una landing de dos páginas. La primera página es la portada (hero), donde aparece el texto “Portafolio” sobre fondo azul y un botón “Entrar”; al pulsarlo la pantalla se acerca y abre directamente en el inicio del CV. Desde el CV se vuelve a la portada pulsando “Inicio” o mi nombre c444aro en el header.
 
+Las carpetas de proyecto se abren dentro del CV, en un visor a pantalla completa: la música no se corta ni se reinicia al entrar o salir de un proyecto.
+
 Lleva un header con los apartados:
 
 - Inicio (vuelve a la portada)
@@ -16,7 +18,7 @@ Lleva un header con los apartados:
 - Proyectos
 - Contacto
 
-Hay un botón que activa y desactiva la música de la interfaz. La música solo se detiene con ese botón: al cambiar de sección o de página continúa en el mismo segundo y suena de inmediato, sin cortes ni esperas (la descarga se adelanta desde que abre la página y el audio arranca sin esperar a que cargue completo). Si el navegador bloquea el sonido hasta que el visitante interactúa, la música sigue corriendo en silencio y se escucha con el primer toque, sin reiniciarse. En tableta y móvil, el header se queda en el mismo formato, pero se debe adaptar en tamaño a la pantalla.
+Hay un botón que activa y desactiva la música de la interfaz. La música vive en el CV y solo se detiene con ese botón: las carpetas de proyecto se abren dentro del CV (visor a pantalla completa), así que al entrar y salir de un proyecto sigue en el mismo segundo, sin cortes, sin reinicios y sin esperas. El botón del header del proyecto controla esa misma música. Si el navegador bloquea el sonido hasta que el visitante interactúa, la música arranca con el primer gesto sin reiniciarse. En tableta y móvil (pantallas táctiles) los proyectos se abren como página normal y el header se adapta en tamaño a la pantalla.
 
 En el header también lleva mi nombre de c444aro junto con mi logo, que es mi icono; al pulsarlo se vuelve a la portada. Todo el portafolio debe ser responsivo y aplicar mi sistema de diseño.
 
@@ -70,7 +72,7 @@ En esta parte son tres bloques distintos que describen mis habilidades:
 
 Esta es la parte más extensa de todo el portafolio y la más importante. Aquí se muestran todos mis proyectos que he trabajado.
 
-Deben mostrarse como carpetas. Al seleccionar uno se abre el folder, aparecen las imágenes del proyecto y los softwares que se utilizaron para crear el proyecto. Las imágenes se mueven solas. Aparece un link que lleva a la bitácora del proyecto.
+Deben mostrarse como carpetas. Al seleccionar uno se abre el folder dentro del CV (visor a pantalla completa), aparecen las imágenes del proyecto y los softwares que se utilizaron para crear el proyecto. Las imágenes se mueven solas. Aparece un link que lleva a la bitácora del proyecto y el enlace “Volver a proyectos” regresa al CV sin que la música se corte.
 
 Lista con todos los proyectos, softwares, una pequeña descripción y el link a la bitácora:
 
