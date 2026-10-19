@@ -7,6 +7,7 @@ colors:
   secondary: "#E80029"
   tertiary: "#FFC600"
   neutral: "#F9DFB7"
+  canvas: "#FCF4E8"
   ink: "#0B1F3A"
   white: "#FFFFFF"
   primary-soft: "rgba(0, 129, 197, 0.6)"
@@ -20,25 +21,25 @@ typography:
     fontFamily: Mr Eaves Sans OT
     fontSize: 64px
     fontWeight: 900
-    lineHeight: 1.1
+    lineHeight: 1.12
     letterSpacing: -0.02em
   headline-lg:
     fontFamily: Mr Eaves Sans OT
     fontSize: 44px
     fontWeight: 900
-    lineHeight: 1.15
+    lineHeight: 1.18
     letterSpacing: -0.01em
   headline-md:
     fontFamily: Mr Eaves Sans OT
     fontSize: 28px
-    fontWeight: 600
-    lineHeight: 1.25
+    fontWeight: 700
+    lineHeight: 1.3
     letterSpacing: 0em
   body-lg:
     fontFamily: Avenir
     fontSize: 18px
     fontWeight: 400
-    lineHeight: 1.6
+    lineHeight: 1.65
     letterSpacing: 0em
   body-md:
     fontFamily: Avenir
@@ -51,12 +52,18 @@ typography:
     fontSize: 14px
     fontWeight: 500
     lineHeight: 1.4
-    letterSpacing: 0.02em
+    letterSpacing: 0.04em
   label-lg:
     fontFamily: Avenir
     fontSize: 18px
     fontWeight: 900
     lineHeight: 1.4
+    letterSpacing: 0em
+  accent:
+    fontFamily: Borel
+    fontSize: 30px
+    fontWeight: 400
+    lineHeight: 1.2
     letterSpacing: 0em
 rounded:
   none: 0px
@@ -74,6 +81,9 @@ spacing:
   container: 1200px
   shadow-offset: 12px
 components:
+  page:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.neutral}"
@@ -140,18 +150,19 @@ Portafolio de Carolina Romero bajo el concepto "menos es más". Sensación jugue
 - Inspiración: patrones de textiles mexicanos.
 - Ícono principal: mándala simétrico estilo pixelado / bordado de punto de cruz. Formas rojas curvas ({colors.secondary}), ramas azules ({colors.primary}), centro amarillo ({colors.tertiary}). Se repite en las cuatro direcciones.
 - Marca verbal: "c444aro" solo en contacto o junto al ícono, texto a la izquierda e ícono a la derecha, en Mr Eaves Sans OT Heavy ({typography.headline-display}). El ícono siempre va sobre beige ({colors.neutral}), nunca sobre blanco. En el resto del sitio el nombre es "Carolina Romero", nunca "c444aro". En CV siempre "Carolina Romero".
-- Secciones base: Inicio, Sobre mí, Experiencia, Educación, Proyectos/Portafolio, Habilidades y Contacto. Una gran sección vertical continua, nunca partida; las serpentinas conectan una sección con la siguiente.
+- Secciones base: Inicio, Sobre mí, Experiencia, Educación, Proyectos/Portafolio, Habilidades y Contacto. Cada sección es una parada independiente; la continuidad la dan solo las serpentinas orgánicas.
 - Elementos gráficos recurrentes: serpentinas orgánicas con degradado de primarios en movimiento lento y suave (fondo, encabezados, fotos), ícono como cursor, favicon, marcos y separadores. Cursor personalizado con rastro azul de baja opacidad, activo también en táctil siguiendo el dedo. <!-- REVISAR: valores de movimiento, opacidad del rastro y degradado no especificados en el original -->
 
 ## Colors
 
-Paleta de PANTONES para no alterar el color en web, impresión y digital. Base neutral beige que hace resaltar primarios y patrón.
+Paleta de PANTONES para no alterar el color en web, impresión y digital. Base neutral: canvas {colors.canvas} como fondo de página y beige de marca {colors.neutral}, que hacen resaltar los primarios y el patrón.
 
 - **Primary ({colors.primary}):** PANTONE Process Blue. Máxima atención visual. Textos, gráficos e íconos. Sobre {colors.primary} usar texto beige ({colors.neutral}).
 - **Secondary ({colors.secondary}):** PANTONE 185. Textos, gráficos e íconos. Sobre {colors.secondary} usar texto beige ({colors.neutral}).
 - **Tertiary ({colors.tertiary}):** PANTONE 7548, amarillo brillante. Ícono, gráficos, fondo de botones y contenedores. Sobre {colors.tertiary} usar texto azul marino ({colors.ink}).
 - **Neutral ({colors.neutral}):** PANTONE 7506, beige. Siempre el fondo de la marca. Nunca para texto, salvo que sea el único tono contrastante dentro de un contenedor de color.
 - **Ink ({colors.ink}):** azul marino casi negro. Color del texto de cuerpo. No usar negro puro ni gris.
+- **Canvas ({colors.canvas}):** beige claro de fondo de página, un tono por debajo del beige de marca ({colors.neutral}). Es el lienzo sobre el que descansa todo el sistema.
 - **White ({colors.white}):** neutro de apoyo, solo para texto sobre botones o contenedores azules o rojos como alternativa de contraste. <!-- REVISAR: el original pide beige sobre azul/rojo y a la vez blanco sobre azul/rojo; se mantiene beige como regla y blanco como alternativa AA -->
 - Suaves para contenedores: {colors.primary-soft}, {colors.secondary-soft}, {colors.tertiary-soft} (primarios al 50–60%). <!-- REVISAR: se asumió 60% (0.6); el original dice 50% o 60% -->
 - Sombras sólidas: {colors.shadow-blue}, {colors.shadow-red}, {colors.shadow-yellow} (primarios al 70%).
@@ -160,22 +171,23 @@ Nota de contraste: las combinaciones {colors.primary}/{colors.neutral} (3.29:1) 
 
 ## Typography
 
-Solo dos familias Sans-Serif. La jerarquía se logra con peso y tamaño, no con más colores ni decoración. Bonus: ambas familias usan color para resaltar.
+Tres familias: Mr Eaves Sans OT para títulos, Avenir para cuerpo y enlaces, y Borel como acento juguetón intercalado en etiquetas y detalles. La jerarquía se logra con peso y tamaño, no con más colores ni decoración.
 
 - Títulos: Mr Eaves Sans OT Heavy ({typography.headline-display}, {typography.headline-lg}).
-- Subtítulos: misma familia en peso menor ({typography.headline-md}). <!-- REVISAR: peso exacto no especificado; se asumió 600 -->
-- Cuerpo: Avenir Book o Medium ({typography.body-lg}, {typography.body-md}). <!-- REVISAR: Book=400, Medium=500 asumidos -->
+- Subtítulos: misma familia en peso menor ({typography.headline-md}).
+- Cuerpo: Avenir Book o Medium ({typography.body-lg}, {typography.body-md}).
+- Acento: Borel Regular 30px ({typography.accent}) en etiquetas, botones y detalles, para el aire juguetón. <!-- REVISAR: lineHeight 1.2 asumido -->
 - Etiquetas y pies de foto: Avenir Medium 14px ({typography.label-md}).
 - Enlaces y URLs: Avenir Black ({typography.label-lg}). En reposo azul ({colors.primary}), al seleccionar cambia a rojo ({colors.secondary}).
-- Escala: principal 64px, sección 44px, subtítulo 28px, cuerpo 18px, etiquetas 14px.
-- Interlineado: default del sistema, basta con que el texto no se empalme. <!-- REVISAR: se asumieron lineHeight 1.1–1.6 y letterSpacing en tokens; definir valores exactos -->
+- Escala: principal 64px, sección 44px, subtítulo 28px, cuerpo 18px, acento Borel 30px, etiquetas 14px.
+- Interlineado: default del sistema, basta con que el texto no se empalme.
 
 ## Layout
 
-Modelo de secciones continuas con mucho aire beige alrededor de títulos, fotos y tarjetas. Respetar "menos es más", legibilidad y jerarquía.
+La continuidad la dan solo las serpentinas orgánicas: cada sección es una parada con su propio lugar, no una única sección vertical. Mucho aire beige alrededor de títulos, fotos y tarjetas. Respetar "menos es más", legibilidad y jerarquía.
 
 - Ancho máximo en computadora: {spacing.container} (1200px), centrado.
-- Espacio vertical entre secciones: {spacing.section} (120px) en computadora. En foto + texto, espaciado considerable. <!-- REVISAR: valor mobile/tablet no especificado -->
+- Espacio vertical entre secciones: {spacing.section} (120px) en computadora, más compacto que antes. En foto + texto, espaciado considerable. <!-- REVISAR: valor mobile/tablet no especificado -->
 - Escala de espaciado: {spacing.xs} / {spacing.sm} / {spacing.md} / {spacing.lg} / {spacing.xl} sobre base 8px. <!-- REVISAR: escala completa asumida; el original solo fija 120px, 1200px y 12px de sombra -->
 - Responsive: una sola columna en celular; adaptable a tablet y computadora sin perder sentido gráfico ni legibilidad. <!-- REVISAR: breakpoints y gutters no especificados -->
 - Header fijo (sticky) siempre visible con: Inicio, Sobre mí, Experiencia, Educación, Proyectos/Portafolio, Habilidades y Contacto. La sección activa se subraya en primario.
@@ -223,6 +235,6 @@ Don't:
 - Don't usar esquinas cuadradas; todo orgánico y redondeado ({rounded.sm} mínimo, {rounded.full} en botones).
 - Don't usar negro puro ni gris en textos; usar {colors.ink}.
 - Don't usar sombras difuminadas; usar recuadro sólido al 70% desplazado {spacing.shadow-offset}.
-- Don't usar más de dos tipografías (Mr Eaves Sans OT + Avenir).
+- Don't usar más de tres tipografías (Mr Eaves Sans OT + Avenir + Borel).
 - Don't escribir "c444aro" en el CV; ahí va "Carolina Romero".
 - Don't poner el ícono sobre blanco; siempre sobre {colors.neutral}.
