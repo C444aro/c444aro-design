@@ -1,1 +1,8 @@
 .DS_Store
+
+# Archivos fuente de diseño y material pesado que no se publica en el sitio
+assets/assets.ai
+assets/gifs.aep
+assets/gifs.aep_AME/
+assets/imagenes/
+assets/musica/musica-cv.mp4

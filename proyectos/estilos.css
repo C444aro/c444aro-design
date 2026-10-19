@@ -1,0 +1,127 @@
+/* Sistema c444aro — páginas de proyecto (tokens de DESIGN.md) */
+:root{
+  --primary:#0081C5; --secondary:#E80029; --tertiary:#FFC600;
+  --neutral:#F9DFB7; --ink:#0B1F3A; --white:#FFFFFF; --canvas:#FCF4E8;
+  --primary-soft:rgba(0,129,197,.6); --secondary-soft:rgba(232,0,41,.6); --tertiary-soft:rgba(255,198,0,.6);
+  --shadow-blue:rgba(0,129,197,.7); --shadow-red:rgba(232,0,41,.7); --shadow-yellow:rgba(255,198,0,.7);
+  --rounded-sm:8px; --rounded-md:12px; --rounded-full:9999px;
+  --sm:8px; --md:16px; --lg:24px; --xl:32px; --container:1200px; --shadow-offset:12px;
+  --font-display:"Mr Eaves Sans OT","Avenir",system-ui,sans-serif;
+  --font-body:"Avenir",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-accent:"Borel","Avenir",system-ui,sans-serif;
+}
+@font-face{font-family:"Mr Eaves Sans OT";src:url("../tipografias/woff/MrEavesXLModOT-Heavy.woff") format("woff");font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:"Mr Eaves Sans OT";src:url("../tipografias/woff/MrEavesXLModOT-Ultra.woff") format("woff");font-weight:950;font-style:normal;font-display:swap}
+@font-face{font-family:"Mr Eaves Sans OT";src:url("../tipografias/woff/MrEavesXLModOT-Bold.woff") format("woff");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Avenir";src:url("../tipografias/woff/Avenir-Book.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Avenir";src:url("../tipografias/woff/Avenir-Medium.woff") format("woff");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Avenir";src:url("../tipografias/woff/Avenir-Black.woff") format("woff");font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:"Borel";src:url("../tipografias/woff/Borel-Regular.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+*{box-sizing:border-box}
+img{max-width:100%}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-body);font-size:18px;font-weight:400;line-height:1.6}
+h1,h2{font-family:var(--font-display);font-weight:900;line-height:1.15;letter-spacing:-.01em;margin:0 0 var(--md)}
+/* Título del proyecto en Mr Eaves Sans OT Ultra, como la marca verbal */
+h1{font-size:clamp(34px,5vw,64px);font-weight:950;line-height:1.1;letter-spacing:-.02em;color:var(--secondary)}
+h2{font-size:clamp(26px,3.6vw,44px)}
+h3{font-family:var(--font-accent);font-weight:400;font-size:22px;line-height:1.4;letter-spacing:0;margin:0 0 var(--sm);-webkit-text-stroke:0.4px currentColor;}
+p{margin:0 0 var(--md);max-width:64ch}
+a{color:var(--primary);font-weight:900}
+a:hover{color:var(--primary);text-decoration:underline}
+:focus-visible{outline:3px solid var(--secondary);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--canvas);padding:12px 20px;border-radius:0 0 12px 0;z-index:100}
+.skip:focus{left:0}
+.wrap{max-width:var(--container);margin:0 auto;padding:0 var(--lg)}
+/* Header */
+header.site{position:sticky;top:0;z-index:50;background:var(--canvas);border-bottom:2px solid var(--neutral)}
+.nav{display:flex;align-items:center;gap:var(--md);max-width:var(--container);margin:0 auto;padding:var(--sm) var(--lg);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-family:var(--font-display);font-weight:900;font-size:22px}
+.brand img.icon{width:40px;height:40px;flex:none;object-fit:contain;image-rendering:pixelated;background:none}
+.volver{margin-left:auto;display:inline-block;font-family:var(--font-accent);font-size:17px;color:var(--primary);text-decoration:none;background:none;border:0;padding:8px 10px;cursor:pointer;border-radius:var(--rounded-sm);-webkit-text-stroke:0.4px currentColor;}
+.volver:hover{color:var(--secondary);text-decoration:none}
+.volver.inicio{margin-left:0;font-size:19px;padding:10px 12px}
+/* Cursor personalizado de la marca */
+.has-cursor,.has-cursor *{cursor:none!important}
+#cursor{position:fixed;left:-16px;top:-16px;width:32px;height:32px;z-index:9999;pointer-events:none}
+#cursor.hidden{display:none}
+#cursor img{width:100%;height:100%;image-rendering:pixelated;display:block}
+.trail{position:fixed;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--primary);opacity:0;pointer-events:none;z-index:9998}
+.trail.live{animation:trailfade .8s ease-out}
+@keyframes trailfade{from{opacity:.35;transform:scale(1)}to{opacity:0;transform:scale(.2)}}
+
+/* Boton de musica */
+.music-btn{background:var(--tertiary);color:var(--ink);border:0;border-radius:var(--rounded-full);padding:10px 18px;font-family:var(--font-accent);font-size:16px;cursor:pointer;min-height:44px;-webkit-text-stroke:0.4px currentColor;}
+.music-btn[aria-pressed="true"]{background:var(--secondary);color:var(--white)}
+@media(min-width:900px){.music-btn{margin-left:auto}}
+@media(max-width:899px){.music-btn{margin-left:auto}}
+
+/* Secciones */
+.band{position:relative}
+.band .wrap{padding-top:48px;padding-bottom:48px}
+#resumen{background:var(--canvas)}
+#galeria{background:var(--neutral)}
+#siguiente{background:var(--canvas)}
+.kicker{font-family:var(--font-accent);font-size:18px;margin:0 0 var(--sm);-webkit-text-stroke:0.4px currentColor;}
+/* Botones */
+.btn{display:inline-block;border:0;cursor:pointer;text-decoration:none;text-align:center;font-family:var(--font-accent);font-weight:400;font-size:18px;line-height:1.4;padding:16px 28px;border-radius:var(--rounded-full);background:var(--b);color:var(--f);transition:transform .25s ease,box-shadow .25s ease,background .25s ease,color .25s ease;min-height:44px;-webkit-text-stroke:0.4px currentColor;}
+.btn:hover,.btn:focus-visible{transform:translateY(-4px) scale(1.05);background:var(--b-alt);color:var(--f-alt);box-shadow:inset 0 0 0 2px var(--ring),0 8px 0 var(--ring-soft),0 0 18px var(--glow)}
+.btn-p{--b:var(--primary);--f:var(--white);--b-alt:var(--canvas);--f-alt:var(--primary);--ring:var(--primary);--ring-soft:rgba(0,129,197,.25);--glow:rgba(0,129,197,.5)}
+.btn-t{--b:var(--tertiary);--f:var(--ink);--b-alt:var(--ink);--f-alt:var(--tertiary);--ring:var(--ink);--ring-soft:rgba(255,198,0,.4);--glow:rgba(255,198,0,.65)}
+/* Etiquetas de software */
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 var(--lg)}
+.tag{background:var(--primary-soft);border-radius:var(--rounded-sm);padding:8px 12px;font-family:var(--font-accent);font-size:16px;color:var(--ink);-webkit-text-stroke:0.4px currentColor;}
+.tag.r{background:var(--secondary-soft)}
+.tag.y{background:var(--tertiary-soft)}
+/* Galería */
+/* Titulo de cada proyecto, del color de su galeria */
+h1.titulo-rojo{color:var(--secondary)}
+h1.titulo-azul{color:var(--primary)}
+
+/* Fondo y sombra de la galeria, por proyecto, siempre en contraste */
+#galeria.g-roja{background:var(--secondary)}
+#galeria.g-roja h2,#galeria.g-roja .kicker{color:var(--white)}
+#galeria.g-roja .galeria-item{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-blue)}
+#galeria.g-azul{background:var(--primary)}
+#galeria.g-azul h2,#galeria.g-azul .kicker{color:var(--white)}
+#galeria.g-azul .galeria-item{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-red)}
+
+/* Galería: imágenes en fila, una al lado de la otra, con flecha para ver más */
+.galeria-wrap{display:flex;align-items:center;gap:var(--md);width:100%;padding:var(--sm) var(--lg) var(--lg)}
+.galeria{display:flex;gap:var(--lg);align-items:center;overflow-x:auto;scroll-snap-type:x mandatory;list-style:none;margin:0;padding:16px 20px;flex:1;min-width:0;scrollbar-width:none;-ms-overflow-style:none}
+.galeria::-webkit-scrollbar{display:none}
+.galeria > li{flex:0 0 min(680px,68vw);scroll-snap-align:center;min-width:0}
+/* Sin overflow:hidden para que el recuadro de sombra no se recorte */
+.galeria-item{background:var(--canvas);border-radius:var(--rounded-md);box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-blue);transition:transform .25s ease}
+.galeria > li:nth-child(3n+2) .galeria-item{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-red)}
+.galeria > li:nth-child(3n) .galeria-item{box-shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-yellow)}
+.galeria-item:hover{transform:translateY(-4px)}
+/* Todas las imagenes se muestran en el mismo marco 5:4 (el de la 2a imagen de ANA) */
+/* Los dos banners horizontales van apilados, uno encima del otro, dentro del carril.
+   Aqui usan su propio marco, sin recorte, para que se vea la foto completa. */
+.galeria .galeria-doble{display:grid;gap:var(--md);align-content:start}
+.galeria .galeria-doble img{width:100%;max-width:100%;height:auto;aspect-ratio:auto;object-fit:contain;display:block;background:var(--canvas);border-radius:var(--rounded-sm)}
+/* Fotos que se muestran completas, con su propio marco y sin recorte.
+   La celda se ajusta al tamano de la foto para no dejar margenes vacios. */
+.galeria .galeria-libre img{aspect-ratio:auto;object-fit:contain;width:auto;max-width:min(680px,80vw);max-height:560px}
+.galeria > li.galeria-libre{flex:0 0 auto;width:auto}
+
+/* Aire alrededor de la foto dentro de su marco */
+.galeria-air .galeria-item{padding:14px}
+.galeria-air .galeria-item img{border-radius:var(--rounded-sm)}
+.galeria-item img{width:100%;max-width:100%;height:auto;aspect-ratio:5/4;object-fit:cover;object-position:center;display:block;background:var(--canvas);border-radius:var(--rounded-md)}
+/* En galerias con imagenes muy alargadas el cuadro se adapta al tamano de cada foto,
+   para que la imagen quede completa y sin margenes vacios alrededor */
+.nav-gal{flex:none;width:54px;height:54px;border:0;border-radius:var(--rounded-full);background:var(--ink);color:var(--canvas);font-size:24px;line-height:1;cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease}
+.nav-gal:hover{transform:scale(1.08);background:var(--tertiary);color:var(--ink)}
+/* Siguiente proyecto */
+.sig{display:flex;align-items:center;gap:var(--md);flex-wrap:wrap}
+.sig .btn{text-decoration:none}
+footer{padding:32px 0 48px;background:var(--canvas)}
+footer .wrap p{font-family:var(--font-accent);font-size:16px;margin:0;-webkit-text-stroke:0.4px currentColor;}
+/* Transiciones suaves entre páginas */
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+body{animation:pageIn .45s cubic-bezier(.22,.61,.36,1) both}
+html.saliendo body{opacity:0;transform:translateY(-8px);transition:opacity .24s ease,transform .24s ease}
+@media(prefers-reduced-motion:reduce){body{animation:none}html.saliendo body{transition:none}#cursor,.trail{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
